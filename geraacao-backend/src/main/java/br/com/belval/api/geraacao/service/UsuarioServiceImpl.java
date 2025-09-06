@@ -1,0 +1,226 @@
+package br.com.belval.api.geraacao.service;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import br.com.belval.api.geraacao.dto.UsuarioCreateDTO;
+import br.com.belval.api.geraacao.dto.UsuarioResponseDTO;
+import br.com.belval.api.geraacao.dto.UsuarioUpdateDTO;
+import br.com.belval.api.geraacao.model.Instituicao;
+import br.com.belval.api.geraacao.model.Usuario;
+import br.com.belval.api.geraacao.repository.InstituicaoRepository;
+import br.com.belval.api.geraacao.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+
+@Service
+public class UsuarioServiceImpl implements UsuarioService{
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    private static final String UPLOAD_DIR = "uploads/";
+
+    @Autowired
+    private InstituicaoRepository instituicaoRepository;
+
+    @Override
+    @Transactional
+    public UsuarioResponseDTO criarUsuario(@Valid UsuarioCreateDTO dto) {
+        try {
+            String fileName = null;
+            if (dto.getImagem() != null && !dto.getImagem().isEmpty()) {
+                fileName = salvarImagem(dto.getImagem());
+            }
+            Usuario usuario = new Usuario();
+            usuario.setBairro(dto.getBairro());
+            usuario.setCep(dto.getCep());
+            usuario.setCidade(dto.getCidade());
+            usuario.setCpf(dto.getCpf());
+            usuario.setDataNascimento(dto.getDataNascimento());
+            usuario.setEmail(dto.getEmail());
+            usuario.setLogradouro(dto.getLogradouro());
+            usuario.setNumero(dto.getNumero());
+            usuario.setNome(dto.getNome());
+            usuario.setTelefone(dto.getTelefone());
+            usuario.setTipoLogradouro(dto.getTipoLogradouro());
+            usuario.setTipoUser(dto.getTipoUser());
+            usuario.setUf(dto.getUf());
+            usuario.setImagem(fileName != null ? "/uploads/" + fileName : null);
+            usuario.setSenha(dto.getSenha());
+            if (dto.getInstituicaoId() != null) {
+                Instituicao instituicao = instituicaoRepository.findById(dto.getInstituicaoId())
+                        .orElseThrow(() -> new EntityNotFoundException("Instituição não encontrada"));
+                usuario.getInstituicoes().add(instituicao);
+            }
+            Usuario novoUsuario = usuarioRepository.save(usuario);
+            return new UsuarioResponseDTO(novoUsuario);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao salvar imagem: " + e.getMessage(), e);
+
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException("Instituição inválida: " + e.getMessage(), e);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erro inesperado ao criar usuário: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public UsuarioResponseDTO atualizarUsuario(Integer id, UsuarioUpdateDTO dto) {
+        try {
+            Usuario usuario = usuarioRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Usuário com id " + id + " não encontrado"));
+            if (dto.getBairro() != null) { usuario.setBairro(dto.getBairro()); }
+            if (dto.getCep() != null) { usuario.setCep(dto.getCep()); }
+            if (dto.getCidade() != null) { usuario.setCidade(dto.getCidade()); }
+            if (dto.getCpf() != null) { usuario.setCpf(dto.getCpf()); }
+            if (dto.getDataNascimento() != null) { usuario.setDataNascimento(dto.getDataNascimento()); }
+            if (dto.getEmail() != null) { usuario.setEmail(dto.getEmail()); }
+            if (dto.getLogradouro() != null) { usuario.setLogradouro(dto.getLogradouro()); }
+            if (dto.getNome() != null) { usuario.setNome(dto.getNome()); }
+            if (dto.getNumero() != null) { usuario.setNumero(dto.getNumero()); }
+            if (dto.getTelefone() != null) { usuario.setTelefone(dto.getTelefone()); }
+            if (dto.getTipoLogradouro() != null) { usuario.setTipoLogradouro(dto.getTipoLogradouro()); }
+            if (dto.getTipoUser() != null) { usuario.setTipoUser(dto.getTipoUser()); }
+            if (dto.getUf() != null) { usuario.setUf(dto.getUf()); }
+            if (dto.getImagem() != null && !dto.getImagem().isEmpty()) {
+                if (usuario.getImagem() != null) {
+                    String caminhoAntigo = usuario.getImagem();
+                    String nomeArquivoAntigo = caminhoAntigo.replace("/uploads/", "");
+                    Path caminhoArquivoAntigo = Paths.get(UPLOAD_DIR).resolve(nomeArquivoAntigo).toAbsolutePath();
+                    try {
+                        Files.deleteIfExists(caminhoArquivoAntigo);
+                    } catch (IOException e) {
+                        System.err.println("Falha ao deletar arquivo antigo: " + caminhoArquivoAntigo + " - " + e.getMessage());
+                    }
+                }
+                String fileName = salvarImagem(dto.getImagem());
+                usuario.setImagem("/uploads/" + fileName);
+            }
+            Usuario usuarioAtualizado = usuarioRepository.save(usuario);
+            return new UsuarioResponseDTO(usuarioAtualizado);
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao salvar imagem: " + e.getMessage(), e);
+        } catch (EntityNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar usuário: " + e.getMessage(), e);
+        }
+    }
+
+    //Salvar as imagens
+    private String salvarImagem(MultipartFile imagem) throws IOException {
+        if (imagem == null || imagem.isEmpty()) return null;
+        File uploadDir = new File(UPLOAD_DIR);
+        if (!uploadDir.exists()) uploadDir.mkdirs();
+        String fileName = System.currentTimeMillis() + "_" + imagem.getOriginalFilename();
+        Path uploadPath = Paths.get(UPLOAD_DIR).toAbsolutePath().normalize();
+        Path filePath = uploadPath.resolve(fileName);
+        Files.write(filePath, imagem.getBytes());
+        return fileName;
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public UsuarioResponseDTO buscarPorId(Integer id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario com id " + id + " não encontrado"));
+        return new UsuarioResponseDTO(usuario);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UsuarioResponseDTO> listarTodos(){
+        List<Usuario> usuario = usuarioRepository.findAll();
+        if(usuario.isEmpty()) {
+            throw new EntityNotFoundException("Nenhum suario encontrado");
+        }
+        return usuario.stream()
+                .map(UsuarioResponseDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void excluir(Integer id) {
+
+        if(!usuarioRepository.existsById(id)) {
+            throw new EntityNotFoundException("Usuario com id " + id + " não encontrado");
+        }
+        usuarioRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UsuarioResponseDTO> buscaPorDoador(String tipoUser) {
+        if (tipoUser == null || tipoUser.trim().isEmpty()) {
+            throw new IllegalArgumentException("O tipoUser deve ser informado.");
+        }
+
+        List<Usuario> usuarios = usuarioRepository.findByTipoUser(tipoUser);
+        if (usuarios.isEmpty()) {
+            throw new EntityNotFoundException("Nenhum usuário com tipo '" + tipoUser + "' encontrado");
+        }
+
+        return usuarios.stream()
+                .map(UsuarioResponseDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UsuarioResponseDTO> buscarPorInstituicao(Integer idInstituicao){
+
+        if (idInstituicao == null || idInstituicao <= 0) {
+            throw new IllegalArgumentException("ID da instituição inválido");
+        }
+
+        List<Usuario> usuarios = usuarioRepository.findByInstituicoes_Id(idInstituicao);
+        if(usuarios.isEmpty()) {
+            throw new EntityNotFoundException("Nenhum usuario para a instituição com  id " + idInstituicao + " encontrado");
+        }
+
+        return usuarios.stream()
+                .map(UsuarioResponseDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UsuarioResponseDTO login(String login, String senha) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(login);
+
+        if (usuarioOpt.isEmpty()) {
+            throw new EntityNotFoundException("Usuário não encontrado");
+        }
+
+        Usuario usuario = usuarioOpt.get();
+
+        if (usuario.getSenha() == null || !usuario.getSenha().equals(senha)) {
+            throw new IllegalArgumentException("Senha incorreta");
+        }
+
+        // Verifica se o tipo de usuário é permitido
+        String tipo = usuario.getTipoUser();
+        if (!"ADMINISTRADOR".equalsIgnoreCase(tipo) && !"GERENCIADOR".equalsIgnoreCase(tipo)) {
+            throw new SecurityException("Tipo de usuário não autorizado");
+        }
+
+        return new UsuarioResponseDTO(usuario);
+    }
+
+}
+
