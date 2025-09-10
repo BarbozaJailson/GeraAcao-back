@@ -3,6 +3,7 @@ package br.com.belval.api.geraacao.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import br.com.belval.api.geraacao.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import br.com.belval.api.geraacao.dto.MovimentacaoEstoqueResponseDTO;
@@ -49,13 +50,13 @@ public class MovimentacaoEstoqueServiceImpl implements MovimentacaoEstoqueServic
     @Transactional
     public MovimentacaoEstoqueResponseDTO criarMovimentacao(Integer itemId, Integer instituicaoId, Integer requisicaoId, Integer doacaoId, TipoMovimentacao tipoMovimentacao, int quantidade) {
         Item item = itemRepo.findById(itemId)
-                .orElseThrow(() -> new EntityNotFoundException("Item não encontrado: " + itemId));
+                .orElseThrow(() -> new ResourceNotFoundException("Item não encontrado: " + itemId));
         Instituicao instituicao = instituicaoRepo.findById(instituicaoId)
-                .orElseThrow(() -> new EntityNotFoundException("Instituição não encontrada: " + instituicaoId));
+                .orElseThrow(() -> new ResourceNotFoundException("Instituição não encontrada: " + instituicaoId));
         Requisicao requisicao = requisicaoRepo.findById(requisicaoId)
-                .orElseThrow(() -> new EntityNotFoundException("Requisição não encontrada: " + requisicaoId));
+                .orElseThrow(() -> new ResourceNotFoundException("Requisição não encontrada: " + requisicaoId));
         Doacao doacao = doacaoRepo.findById(doacaoId)
-                .orElseThrow(() -> new EntityNotFoundException("Doação não encontrada: " + doacaoId));
+                .orElseThrow(() -> new ResourceNotFoundException("Doação não encontrada: " + doacaoId));
         Estoque estoque = estoqueRepo.findByItemAndInstituicao(item, instituicao).orElse(null);
         if (estoque == null) {
              //Cria novo estoque se não existir
@@ -99,13 +100,13 @@ public class MovimentacaoEstoqueServiceImpl implements MovimentacaoEstoqueServic
     public MovimentacaoEstoqueResponseDTO registrarSaidaEstoque(Integer idItem, Integer idInstituicao, Integer quantidade, TipoMovimentacao tipoMovimentacao, String observação) {
         // 1 - Busca o item
         Item item = itemRepo.findById(idItem)
-                .orElseThrow(() -> new EntityNotFoundException("Item não encontrado: " + idItem));
+                .orElseThrow(() -> new ResourceNotFoundException("Item não encontrado: " + idItem));
         // 2 - Busca a instituição
         Instituicao instituicao = instituicaoRepo.findById(idInstituicao)
-                .orElseThrow(() -> new EntityNotFoundException("Instituição não encontrada: " + idInstituicao));
+                .orElseThrow(() -> new ResourceNotFoundException("Instituição não encontrada: " + idInstituicao));
         // 3 - Busca o estoque existente
         Estoque estoque = estoqueRepo.findByItemAndInstituicao(item, instituicao)
-                .orElseThrow(() -> new EntityNotFoundException("Estoque não encontrado para este item/instituição"));
+                .orElseThrow(() -> new ResourceNotFoundException("Estoque não encontrado para este item/instituição"));
         // 4 - Valida saldo
         if (estoque.getQuantidade() < quantidade) {
             throw new IllegalArgumentException("Quantidade solicitada é maior que o estoque disponível");
@@ -128,7 +129,8 @@ public class MovimentacaoEstoqueServiceImpl implements MovimentacaoEstoqueServic
     // Busca movimentações de estoque por Instituição
     @Override
     public List<MovimentacaoEstoqueResponseDTO> BuscarPorInstituicao(Integer idInstituicao) {
-        Instituicao instit = instituicaoRepo.findById(idInstituicao).orElseThrow();
+        Instituicao instit = instituicaoRepo.findById(idInstituicao)
+                .orElseThrow(() -> new ResourceNotFoundException("Movimentação não encontrada para instituição com id " + idInstituicao));
         List<MovimentacaoEstoque> movim = movRepo.findByInstituicao(instit);
         return movim.stream()
                 .map(MovimentacaoEstoqueResponseDTO::new)
@@ -139,8 +141,78 @@ public class MovimentacaoEstoqueServiceImpl implements MovimentacaoEstoqueServic
     @Override
     public MovimentacaoEstoqueResponseDTO buscarPorId(Integer id) {
         MovimentacaoEstoque mov = movRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Movimentação não encontrada com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Movimentação não encontrada com id: " + id));
         return new MovimentacaoEstoqueResponseDTO(mov);
     }
+    @Override
+    public MovimentacaoEstoqueResponseDTO movimentoByCampanhaDelete(Integer itemId, Integer instituicaoId, Integer quantidade, TipoMovimentacao tipoMovimentacao, String observacao){
+        Item item = itemRepo.findById(itemId)
+                .orElseThrow(() -> new ResourceNotFoundException("Item não encontrado: " + itemId));
+        Instituicao instituicao = instituicaoRepo.findById(instituicaoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Instituição não encontrada: " + instituicaoId));
+        Estoque estoque = estoqueRepo.findByItemAndInstituicao(item, instituicao).orElse(null);
+        if (estoque == null) {
+            //Cria novo estoque se não existir
+            if (tipoMovimentacao == TipoMovimentacao.SAIDA) {
+                throw new IllegalArgumentException("Não há estoque suficiente para saída.");
+            }
+            estoque = new Estoque();
+            estoque.setItem(item);
+            estoque.setInstituicao(instituicao);
+            estoque.setQuantidade(quantidade);
+        } else {
+            // Atualiza estoque existente
+            int novaQtd = estoque.getQuantidade();
+            if (tipoMovimentacao == TipoMovimentacao.UPDATE) {
+                estoque.setQuantidade(estoque.getQuantidade() + quantidade);
+            } else if (tipoMovimentacao == TipoMovimentacao.SAIDA) {
+                if (estoque.getQuantidade() < quantidade) {
+                    throw new IllegalArgumentException("Quantidade insuficiente em estoque.");
+                }
+                estoque.setQuantidade(estoque.getQuantidade() - quantidade);
+            }
+        }
+        estoqueRepo.save(estoque);
+        MovimentacaoEstoque movimento = new MovimentacaoEstoque();
+        movimento.setItem(item);
+        movimento.setInstituicao(instituicao);
+        movimento.setQuantidade(quantidade);
+        movimento.setTipoMovimentacao(tipoMovimentacao);
+        movimento.setDataMovimentacao(LocalDateTime.now());
+        movimento.setRequisicao(null);
+        movimento.setDoacao(null);
+        movimento.setObservacao(observacao);
+        // Você pode adicionar lógica para associar requisicao/doacao aqui se quiser.
+        movRepo.save(movimento);
+        return new MovimentacaoEstoqueResponseDTO(movimento);
+    }
+
+    @Override
+    public MovimentacaoEstoqueResponseDTO movimentoByCampanhaUpdate(Integer itemId, Integer instituicaoId, Integer qtdCampanha, TipoMovimentacao tipoMovimentacao, String observacao, Integer novaQtd){
+        Item item = itemRepo.findById(itemId)
+                .orElseThrow(() -> new ResourceNotFoundException("Item não encontrado: " + itemId));
+        Instituicao instituicao = instituicaoRepo.findById(instituicaoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Instituição não encontrada: " + instituicaoId));
+        Estoque estoque = estoqueRepo.findByItemAndInstituicao(item, instituicao).orElse(null);
+        int qtdEstoque = estoque.getQuantidade();
+        if((qtdEstoque + qtdCampanha) >= novaQtd) {
+            int estoqueNovaQtd = (qtdEstoque + qtdCampanha) - novaQtd;
+            estoque.setQuantidade(estoqueNovaQtd);
+        }
+        estoqueRepo.save(estoque);
+        MovimentacaoEstoque movimento = new MovimentacaoEstoque();
+        movimento.setItem(item);
+        movimento.setInstituicao(instituicao);
+        movimento.setQuantidade(qtdCampanha);
+        movimento.setTipoMovimentacao(tipoMovimentacao);
+        movimento.setDataMovimentacao(LocalDateTime.now());
+        movimento.setRequisicao(null);
+        movimento.setDoacao(null);
+        movimento.setObservacao(observacao);
+        // Você pode adicionar lógica para associar requisicao/doacao aqui se quiser.
+        movRepo.save(movimento);
+        return new MovimentacaoEstoqueResponseDTO(movimento);
+    }
+
 }
 

@@ -19,5 +19,5 @@ public interface CampanhaService {
 
     CampanhaResponseDTO update(Integer id, CampanhaUpdateDTO dto);
 
-    void delete(Campanha campanha);
+    void delete(Integer id);
 }

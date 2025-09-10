@@ -14,4 +14,8 @@ public interface MovimentacaoEstoqueService {
 
     MovimentacaoEstoqueResponseDTO registrarSaidaEstoque(Integer idItem, Integer idInstituicao, Integer quantidade, TipoMovimentacao tipoMovimentacao, String observacao);
 
-}
+    MovimentacaoEstoqueResponseDTO movimentoByCampanhaDelete(Integer itemId, Integer instituicaoId, Integer quantidade, TipoMovimentacao tipoMovimentacao, String observação);
+
+    MovimentacaoEstoqueResponseDTO movimentoByCampanhaUpdate(Integer itemId, Integer instituicaoId, Integer qtdCampaanha, TipoMovimentacao tipoMovimentacao, String observacao, Integer novaQtd);
+
+    }

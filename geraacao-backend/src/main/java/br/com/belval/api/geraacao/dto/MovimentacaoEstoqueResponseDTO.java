@@ -31,7 +31,7 @@ public class MovimentacaoEstoqueResponseDTO {
     public MovimentacaoEstoqueResponseDTO(br.com.belval.api.geraacao.model.MovimentacaoEstoque mov) {
         this.id = mov.getId();
         this.quantidade = mov.getQuantidade();
-        //this.tipoMovimentacao = mov.getTipoMovimentacao();
+        this.tipoMovimentacao = mov.getTipoMovimentacao();
         this.dataMovimentacao = mov.getDataMovimentacao();
         this.observacao = mov.getObservacao();
 

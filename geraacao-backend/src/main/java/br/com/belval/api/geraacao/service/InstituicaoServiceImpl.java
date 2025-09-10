@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.com.belval.api.geraacao.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,15 +25,12 @@ public class InstituicaoServiceImpl implements InstituicaoService{
 
     @Autowired
     private InstituicaoRepository instituicaoRepository;
-
     private static final String UPLOAD_DIR = "uploads/";
-
     // Salvar uma nova instituição
     @Override
     public InstituicaoResponseDTO criarInstituicao(InstituicaoCreateDTO dto) {
         try {
             String fileName = salvarImagem(dto.getImagem());
-
             Instituicao instituicao = new Instituicao();
             instituicao.setNome(dto.getNome());
             instituicao.setBairro(dto.getBairro());
@@ -48,20 +46,18 @@ public class InstituicaoServiceImpl implements InstituicaoService{
             instituicao.setImagem(fileName != null ? "/uploads/" + fileName : null);
             Instituicao novaInstituicao = instituicaoRepository.save(instituicao);
             return new InstituicaoResponseDTO(novaInstituicao);
-
         } catch (IOException e) {
             throw new RuntimeException("Erro ao salvar imagem: " + e.getMessage(), e);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao salvar instituição: " + e.getMessage(), e);
         }
     }
-
     // Atualizar uma instituição por id
     @Override
     public InstituicaoResponseDTO atualizarInstituicao(Integer id, InstituicaoUpdateDTO dto) {
         try {
             Instituicao instituicao = instituicaoRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Instituição com id " + id + " não encontrada"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Instituição com id " + id + " não encontrada"));
             instituicao.setNome(dto.getNome());
             instituicao.setBairro(dto.getBairro());
             instituicao.setCep(dto.getCep());
@@ -93,7 +89,6 @@ public class InstituicaoServiceImpl implements InstituicaoService{
             }
             Instituicao instituicaoAtualizada = instituicaoRepository.save(instituicao);
             return new InstituicaoResponseDTO(instituicaoAtualizada);
-
         } catch (IOException e) {
             throw new RuntimeException("Erro ao salvar imagem: " + e.getMessage(), e);
         } catch (EntityNotFoundException e) {
@@ -102,7 +97,6 @@ public class InstituicaoServiceImpl implements InstituicaoService{
             throw new RuntimeException("Erro ao atualizar instituição: " + e.getMessage(), e);
         }
     }
-
     //Salvar as imagens
     private String salvarImagem(MultipartFile imagem) throws IOException {
         if (imagem == null || imagem.isEmpty()) return null;
@@ -114,48 +108,38 @@ public class InstituicaoServiceImpl implements InstituicaoService{
         Files.write(filePath, imagem.getBytes());
         return fileName;
     }
-
     // Busca instituição por id
     @Override
     public InstituicaoResponseDTO buscarPorId(Integer id) {
         Instituicao instituicao = instituicaoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Instituicao Com id: " + id + " não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Instituicao Com id: " + id + " não encontrado"));
         return new InstituicaoResponseDTO(instituicao);
     }
-
     // Busca todas as instituições
     @Override
     public List<InstituicaoResponseDTO> listarTodos(){
-
         List<Instituicao> instituicao = instituicaoRepository.findAll();
-
         if(instituicao.isEmpty()) {
-            throw new EntityNotFoundException("Nenhuma Instituição encontrada");
+            throw new ResourceNotFoundException("Nenhuma Instituição encontrada");
         }
         return instituicao.stream()
                 .map(InstituicaoResponseDTO::new)
                 .collect(Collectors.toList());
-
     }
-
     // Exclui instituição por id
     @Override
     public void excluir(Integer id) {
-
         if(!instituicaoRepository.existsById(id)) {
-            throw new EntityNotFoundException("Instituicao com id: " + id + " não encontrado");
+            throw new ResourceNotFoundException("Instituicao com id: " + id + " não encontrado");
         }
-
         instituicaoRepository.deleteById(id);
     }
-
     // Busca instituicao por cnpj
     @Override
     public InstituicaoResponseDTO buscarPorCnpj(String cnpj) {
         Instituicao instituicao = instituicaoRepository.findByCnpj(cnpj)
-                .orElseThrow(() ->new  EntityNotFoundException("Instituição com cnpj " + cnpj + " não encontrada"));
+                .orElseThrow(() ->new  ResourceNotFoundException("Instituição com cnpj " + cnpj + " não encontrada"));
         return new InstituicaoResponseDTO(instituicao);
     }
-
 }
 

@@ -24,61 +24,32 @@ public class ItemController {
     //Fazer busca completa no banco de dados
     @GetMapping
     public ResponseEntity<List<ItemResponseDTO>> getAll() {
-        List<ItemResponseDTO> itens = itemService.listarTodos();
-
-        return ResponseEntity.ok(itens);
+        return ResponseEntity.ok(itemService.listarTodos());
     }
 
     //Buscar Item pelo Id
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Integer id){
-        try {
-            ItemResponseDTO item = itemService.buscarPorId(id);
-            return ResponseEntity.ok(item);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno no servidor");
-        }
+            return ResponseEntity.ok(itemService.buscarPorId(id));
     }
 
     //Inserir Item no banco
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> salvarItem(@ModelAttribute @Valid ItemCreateDTO dto) {
-        try {
-            ItemResponseDTO item = itemService.criarItem(dto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(item);
-        }catch(Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+            return ResponseEntity.status(HttpStatus.CREATED).body(itemService.criarItem(dto));
     }
 
     //Atualizar Item pelo Id
     @PutMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> atualizarItem(@PathVariable Integer id, @ModelAttribute @Valid ItemUpdateDTO dto) {
-        try {
-            ItemResponseDTO item = itemService.atualizarItem(id, dto);
-            return ResponseEntity.ok(item);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno no servidor");
-        }
+            return ResponseEntity.ok(itemService.atualizarItem(id, dto));
     }
 
     //Deletar Item pelo Id
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id){
-        try {
             itemService.excluir(id);
             return ResponseEntity.noContent().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno no servidor");
-        }
     }
 }
 

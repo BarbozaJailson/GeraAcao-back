@@ -2,6 +2,7 @@ package br.com.belval.api.geraacao.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import br.com.belval.api.geraacao.exception.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class EstoqueServiceImpl implements EstoqueService {
     @Override
     public EstoqueResponseDTO buscarEstoquePorId(Integer id) {
         Estoque estoque = estoqueRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Estoque com id: " + id + " não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Estoque com id: " + id + " não encontrado"));
         return new EstoqueResponseDTO(estoque);
     }
 }

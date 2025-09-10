@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import br.com.belval.api.geraacao.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,15 +27,11 @@ import jakarta.validation.Valid;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService{
-
     @Autowired
     private UsuarioRepository usuarioRepository;
-
     private static final String UPLOAD_DIR = "uploads/";
-
     @Autowired
     private InstituicaoRepository instituicaoRepository;
-
     @Override
     @Transactional
     public UsuarioResponseDTO criarUsuario(@Valid UsuarioCreateDTO dto) {
@@ -61,15 +58,13 @@ public class UsuarioServiceImpl implements UsuarioService{
             usuario.setSenha(dto.getSenha());
             if (dto.getInstituicaoId() != null) {
                 Instituicao instituicao = instituicaoRepository.findById(dto.getInstituicaoId())
-                        .orElseThrow(() -> new EntityNotFoundException("Instituição não encontrada"));
+                        .orElseThrow(() -> new ResourceNotFoundException("Instituição não encontrada"));
                 usuario.getInstituicoes().add(instituicao);
             }
             Usuario novoUsuario = usuarioRepository.save(usuario);
             return new UsuarioResponseDTO(novoUsuario);
-
         } catch (IOException e) {
             throw new RuntimeException("Erro ao salvar imagem: " + e.getMessage(), e);
-
         } catch (EntityNotFoundException e) {
             throw new RuntimeException("Instituição inválida: " + e.getMessage(), e);
 
@@ -77,7 +72,6 @@ public class UsuarioServiceImpl implements UsuarioService{
             throw new RuntimeException("Erro inesperado ao criar usuário: " + e.getMessage(), e);
         }
     }
-
     @Override
     @Transactional
     public UsuarioResponseDTO atualizarUsuario(Integer id, UsuarioUpdateDTO dto) {
@@ -121,7 +115,6 @@ public class UsuarioServiceImpl implements UsuarioService{
             throw new RuntimeException("Erro ao atualizar usuário: " + e.getMessage(), e);
         }
     }
-
     //Salvar as imagens
     private String salvarImagem(MultipartFile imagem) throws IOException {
         if (imagem == null || imagem.isEmpty()) return null;
@@ -137,88 +130,72 @@ public class UsuarioServiceImpl implements UsuarioService{
     @Transactional(readOnly = true)
     public UsuarioResponseDTO buscarPorId(Integer id) {
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Usuario com id " + id + " não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario com id " + id + " não encontrado"));
         return new UsuarioResponseDTO(usuario);
     }
-
     @Override
     @Transactional(readOnly = true)
     public List<UsuarioResponseDTO> listarTodos(){
         List<Usuario> usuario = usuarioRepository.findAll();
         if(usuario.isEmpty()) {
-            throw new EntityNotFoundException("Nenhum suario encontrado");
+            throw new ResourceNotFoundException("Nenhum suario encontrado");
         }
         return usuario.stream()
                 .map(UsuarioResponseDTO::new)
                 .collect(Collectors.toList());
     }
-
     @Override
     @Transactional
     public void excluir(Integer id) {
-
         if(!usuarioRepository.existsById(id)) {
-            throw new EntityNotFoundException("Usuario com id " + id + " não encontrado");
+            throw new ResourceNotFoundException("Usuario com id " + id + " não encontrado");
         }
         usuarioRepository.deleteById(id);
     }
-
     @Override
     @Transactional(readOnly = true)
     public List<UsuarioResponseDTO> buscaPorDoador(String tipoUser) {
         if (tipoUser == null || tipoUser.trim().isEmpty()) {
             throw new IllegalArgumentException("O tipoUser deve ser informado.");
         }
-
         List<Usuario> usuarios = usuarioRepository.findByTipoUser(tipoUser);
         if (usuarios.isEmpty()) {
-            throw new EntityNotFoundException("Nenhum usuário com tipo '" + tipoUser + "' encontrado");
+            throw new ResourceNotFoundException("Nenhum usuário com tipo '" + tipoUser + "' encontrado");
         }
-
         return usuarios.stream()
                 .map(UsuarioResponseDTO::new)
                 .collect(Collectors.toList());
     }
-
     @Override
     @Transactional(readOnly = true)
     public List<UsuarioResponseDTO> buscarPorInstituicao(Integer idInstituicao){
-
         if (idInstituicao == null || idInstituicao <= 0) {
             throw new IllegalArgumentException("ID da instituição inválido");
         }
-
         List<Usuario> usuarios = usuarioRepository.findByInstituicoes_Id(idInstituicao);
         if(usuarios.isEmpty()) {
-            throw new EntityNotFoundException("Nenhum usuario para a instituição com  id " + idInstituicao + " encontrado");
+            throw new ResourceNotFoundException("Nenhum usuario para a instituição com  id " + idInstituicao + " encontrado");
         }
-
         return usuarios.stream()
                 .map(UsuarioResponseDTO::new)
                 .collect(Collectors.toList());
     }
-
     @Override
     @Transactional(readOnly = true)
     public UsuarioResponseDTO login(String login, String senha) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(login);
-
         if (usuarioOpt.isEmpty()) {
-            throw new EntityNotFoundException("Usuário não encontrado");
+            throw new ResourceNotFoundException("Usuário não encontrado");
         }
-
         Usuario usuario = usuarioOpt.get();
-
         if (usuario.getSenha() == null || !usuario.getSenha().equals(senha)) {
             throw new IllegalArgumentException("Senha incorreta");
         }
-
         // Verifica se o tipo de usuário é permitido
         String tipo = usuario.getTipoUser();
         if (!"ADMINISTRADOR".equalsIgnoreCase(tipo) && !"GERENCIADOR".equalsIgnoreCase(tipo)) {
             throw new SecurityException("Tipo de usuário não autorizado");
         }
-
         return new UsuarioResponseDTO(usuario);
     }
 

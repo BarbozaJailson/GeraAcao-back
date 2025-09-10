@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.com.belval.api.geraacao.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,7 +92,7 @@ public class ItemServiceImpl implements ItemService{
 
         }catch (IOException e) {
             throw new RuntimeException("Erro ao salvar imagem: " + e.getMessage(), e);
-        } catch (EntityNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             throw e;
         } catch (Exception e) {
             throw new RuntimeException("Erro ao atualizar instituição: " + e.getMessage(), e);
@@ -115,7 +116,7 @@ public class ItemServiceImpl implements ItemService{
     @Transactional(readOnly = true)
     public ItemResponseDTO buscarPorId(Integer id) {
         Item item = itemRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Item com id " + id + " não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Item com id " + id + " não encontrado"));
         return new ItemResponseDTO(item);
     }
 
@@ -125,7 +126,7 @@ public class ItemServiceImpl implements ItemService{
     public List<ItemResponseDTO> listarTodos(){
         List<Item> item = itemRepository.findAll();
         if(item.isEmpty()) {
-            throw new EntityNotFoundException("Nenhum item encontrado");
+            throw new ResourceNotFoundException("Nenhum item encontrado");
         }
         //lista os itens
         return item.stream()
@@ -138,7 +139,7 @@ public class ItemServiceImpl implements ItemService{
     @Transactional
     public void excluir(Integer id) {
         if(!itemRepository.existsById(id)) {
-            throw new EntityNotFoundException("Item com id " + id + " não encontrado");
+            throw new ResourceNotFoundException("Item com id " + id + " não encontrado");
         }
         itemRepository.deleteById(id);
     }

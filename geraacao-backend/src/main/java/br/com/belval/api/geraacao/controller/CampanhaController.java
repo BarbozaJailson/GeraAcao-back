@@ -2,12 +2,13 @@ package br.com.belval.api.geraacao.controller;
 
 import br.com.belval.api.geraacao.dto.CampanhaCreateDTO;
 import br.com.belval.api.geraacao.dto.CampanhaResponseDTO;
+import br.com.belval.api.geraacao.dto.CampanhaUpdateDTO;
 import br.com.belval.api.geraacao.service.CampanhaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -16,43 +17,35 @@ public class CampanhaController {
 
     @Autowired
     private CampanhaService campanhaService;
-    public ResponseEntity<List<CampanhaResponseDTO>> findAll(){
-        List<CampanhaResponseDTO> campanhas = campanhaService.findAll();
-        return ResponseEntity.ok(campanhas);
+
+    @GetMapping
+    public ResponseEntity<List<CampanhaResponseDTO>> findAll() {
+        return ResponseEntity.ok(campanhaService.findAll());
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<?> findById(Integer id) {
-        try {
-            CampanhaResponseDTO campanha = campanhaService.findById(id);
-            return ResponseEntity.ok(campanha);
-        }catch (Exception e){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<CampanhaResponseDTO> findById(@PathVariable Integer id) {
+        return ResponseEntity.ok(campanhaService.findById(id));
     }
+
     @GetMapping("/instituicao/{instituicaoId}")
-    public ResponseEntity<?> findByInstituicao(@Valid @PathVariable Integer instituicaoId) {
-        try{
-            List<CampanhaResponseDTO> campanhas = campanhaService.findByInstituicaoId(instituicaoId);
-            return ResponseEntity.ok(campanhas);
-        }catch(Exception e){
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+    public ResponseEntity<List<CampanhaResponseDTO>> findByInstituicao(@PathVariable Integer instituicaoId) {
+        return ResponseEntity.ok(campanhaService.findByInstituicaoId(instituicaoId));
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@Valid @RequestBody CampanhaCreateDTO dto) {
-        try{
-            CampanhaResponseDTO campanha = campanhaService.criarCampanha(dto);
-            return ResponseEntity.ok(campanha);
-        }catch(Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-        }
+    public ResponseEntity<CampanhaResponseDTO> save(@Valid @RequestBody CampanhaCreateDTO dto) {
+        return ResponseEntity.ok(campanhaService.criarCampanha(dto));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CampanhaResponseDTO> update(@Valid @RequestBody CampanhaUpdateDTO dto, @PathVariable Integer id) {
+        return ResponseEntity.ok(campanhaService.update(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        campanhaService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

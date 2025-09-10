@@ -3,6 +3,9 @@ package br.com.belval.api.geraacao.dto;
 import java.time.LocalDateTime;
 
 import br.com.belval.api.geraacao.model.TipoMovimentacao;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -16,7 +19,6 @@ public class MovimentacaoEstoqueCreateDTO {
     private int quantidade;
 
     @NotNull(message = "Tipo de movimentação é obrigatório")
-    @Size(max = 20)
     private TipoMovimentacao tipoMovimentacao;
 
     private LocalDateTime dataMovimentacao; // opcional

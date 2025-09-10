@@ -3,6 +3,7 @@ package br.com.belval.api.geraacao.service;
 import br.com.belval.api.geraacao.dto.DoacaoCreateDTO;
 import br.com.belval.api.geraacao.dto.DoacaoResponseDTO;
 import br.com.belval.api.geraacao.dto.DoacaoUpdateDTO;
+import br.com.belval.api.geraacao.exception.ResourceNotFoundException;
 import br.com.belval.api.geraacao.model.Doacao;
 import br.com.belval.api.geraacao.model.Requisicao;
 import br.com.belval.api.geraacao.model.TipoMovimentacao;
@@ -35,9 +36,9 @@ public class DoacaoServiceImpl implements DoacaoService{
     @Transactional
     public DoacaoResponseDTO criarDoacao(DoacaoCreateDTO dto) {
         Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
-                .orElseThrow(() -> new EntityNotFoundException("Usuário com id " + dto.getUsuarioId() + " não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário com id " + dto.getUsuarioId() + " não encontrado."));
         Requisicao requisicao = requisicaoRepository.findById(dto.getRequisicaoId())
-                .orElseThrow(() -> new EntityNotFoundException("Requisição com id " + dto.getRequisicaoId() + " não encontrada."));
+                .orElseThrow(() -> new ResourceNotFoundException("Requisição com id " + dto.getRequisicaoId() + " não encontrada."));
         if(dto.getQuantidade() <= 0) {
             throw new IllegalArgumentException("Quantidade da doação deve ser maior que zero.");
         }
@@ -71,7 +72,7 @@ public class DoacaoServiceImpl implements DoacaoService{
     @Transactional
     public DoacaoResponseDTO atualizarDoacao(Integer id, DoacaoUpdateDTO dto) {
         Doacao doacao = doacaoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Doação com id " + id + " não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Doação com id " + id + " não encontrada"));
         System.out.print("id : " + id);
         if (dto.getStatus() != null) {
             doacao.setStatus(dto.getStatus());
@@ -84,13 +85,13 @@ public class DoacaoServiceImpl implements DoacaoService{
         System.out.print("quantidade : " + dto.getQuantidade());
         if (dto.getUsuarioId() != null) {
             Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
-                    .orElseThrow(() -> new EntityNotFoundException("Usuário com id " + dto.getUsuarioId() + " não encontrado"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Usuário com id " + dto.getUsuarioId() + " não encontrado"));
             doacao.setUsuario(usuario);
         }
         System.out.print("usuarioId : " + dto.getUsuarioId());
         if (dto.getRequisicaoId() != null) {
             Requisicao requisicao = requisicaoRepository.findById(dto.getRequisicaoId())
-                    .orElseThrow(() -> new EntityNotFoundException("Requisição com id " + dto.getRequisicaoId() + " não encontrada"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Requisição com id " + dto.getRequisicaoId() + " não encontrada"));
             doacao.setRequisicao(requisicao);
         }
         System.out.print("requisicaoId : " + dto.getRequisicaoId());
@@ -103,7 +104,7 @@ public class DoacaoServiceImpl implements DoacaoService{
     @Transactional(readOnly = true)
     public DoacaoResponseDTO buscarPorId(Integer id) {
         Doacao doacao = doacaoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Doação com id " + id + " não encontrada."));
+                .orElseThrow(() -> new ResourceNotFoundException("Doação com id " + id + " não encontrada."));
         return new DoacaoResponseDTO(doacao);
     }
 
@@ -113,7 +114,7 @@ public class DoacaoServiceImpl implements DoacaoService{
     public List<DoacaoResponseDTO> listarTodos(){
         List<Doacao> doacoes = doacaoRepository.findAll();
         if (doacoes.isEmpty()) {
-            throw new EntityNotFoundException("Nenhuma doação encontrada");
+            throw new ResourceNotFoundException("Nenhuma doação encontrada");
         }
         return doacoes.stream()
                 .map(DoacaoResponseDTO::new)
@@ -125,7 +126,7 @@ public class DoacaoServiceImpl implements DoacaoService{
     @Transactional
     public void excluir(Integer id) {
         if (!doacaoRepository.existsById(id)) {
-            throw new EntityNotFoundException("Doação com id " + id + " não encontrada");
+            throw new ResourceNotFoundException("Doação com id " + id + " não encontrada");
         }
         doacaoRepository.deleteById(id);
     }
@@ -136,7 +137,7 @@ public class DoacaoServiceImpl implements DoacaoService{
     public List<DoacaoResponseDTO> buscarPorDoador(@PathVariable Integer id) {
         List<Doacao> doacao = doacaoRepository.findByUsuarioId(id);
         if(doacao.isEmpty()) {
-            throw new EntityNotFoundException("Doacao do usuario com id " + id + " não encontrada");
+            throw new ResourceNotFoundException("Doacao do usuario com id " + id + " não encontrada");
         }
         return doacao.stream()
                 .map(DoacaoResponseDTO::new)
@@ -149,7 +150,7 @@ public class DoacaoServiceImpl implements DoacaoService{
     public List<DoacaoResponseDTO> buscarPorInstituicao(@PathVariable Long idInstituicao) {
         List<Doacao> doacao = doacaoRepository.findByInstituicaoId(idInstituicao);
         if(doacao.isEmpty()) {
-            throw new EntityNotFoundException("Doacao da instituicao com id " + idInstituicao + " não encontrado");
+            throw new ResourceNotFoundException("Doacao da instituicao com id " + idInstituicao + " não encontrado");
         }
         return doacao.stream()
                 .map(DoacaoResponseDTO::new)

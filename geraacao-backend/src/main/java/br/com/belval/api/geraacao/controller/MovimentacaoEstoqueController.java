@@ -24,38 +24,18 @@ public class MovimentacaoEstoqueController {
     // Salvar movimentação
     @PostMapping
     public ResponseEntity<?> registrarSaidaEstoque(@Valid @RequestBody MovimentacaoEstoqueCreateDTO dto) {
-        try {
-            MovimentacaoEstoqueResponseDTO response = movService.registrarSaidaEstoque(
-                    dto.getItemId(), dto.getInstituicaoId(), dto.getQuantidade(), dto.getTipoMovimentacao(), dto.getObservacao());
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro interno: " + e.getMessage());
-        }
+            return ResponseEntity.status(HttpStatus.CREATED).body(movService.registrarSaidaEstoque(
+                    dto.getItemId(), dto.getInstituicaoId(), dto.getQuantidade(), dto.getTipoMovimentacao(), dto.getObservacao()));
     }
-
     // Busca movimentações por Instituição
-    @GetMapping("/{idInstituicao}")
+    @GetMapping("/instituicao/{idInstituicao}")
     public ResponseEntity<?> buscaPorInstituicao(@PathVariable Integer idInstituicao) {
-        try {
             return ResponseEntity.ok(movService.BuscarPorInstituicao(idInstituicao));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
     }
-
     // Busca movimetações por Id
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
-        try {
             return ResponseEntity.ok(movService.buscarPorId(id));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
     }
 }
 

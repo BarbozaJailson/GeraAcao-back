@@ -17,7 +17,6 @@ public class MovimentacaoEstoque {
     @NotNull(message = "Quantidade não pode estar vazia")
     @Column(name = "quantidade")
     private int quantidade;
-    @Size(max = 20, message = "O tipo movimentação deve ter no máximo 20 caracteres")
     @NotNull(message = "Tipo movimentacao é obrigatoria")
     @Column(name = "tipo_movimentacao")
     @Enumerated(EnumType.STRING)

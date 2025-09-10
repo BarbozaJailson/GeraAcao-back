@@ -19,7 +19,7 @@ public class Campanha {
     @NotBlank
     @Column(name = "descricao", length = 255, nullable = false)
     private String descricao;
-    @NotBlank
+    @NotNull(message = "A data do evento é obrigatória")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "data_evento", nullable = false)
@@ -48,9 +48,8 @@ public class Campanha {
     @Column(name = "uf", length = 2, nullable = false)
     @Size(min = 2, max = 2)
     private String uf;
-    @NotBlank
-    @Min(1)
-    @PositiveOrZero
+    @NotNull(message = "A quantidade é obrigatória")
+    @Min(value = 1, message = "A quantidade deve ser no mínimo 1")
     @Column(name = "quantidade", nullable = false)
     private Integer quantidade;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -58,12 +57,12 @@ public class Campanha {
     @Column(name = "data_cadastro")
     private LocalDate dataCadastro;
     //Relacionamento com 'Item'
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_item", nullable = false)
     @NotNull(message = "O Item é obrigatório!")
     private Item item;
     //Relacionamento com 'Instituição'
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_instituicao")
     @NotNull(message = "Instituição é obrigatoria")
     private Instituicao instituicao;
