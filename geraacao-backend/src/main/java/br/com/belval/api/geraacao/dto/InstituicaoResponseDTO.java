@@ -3,6 +3,7 @@ package br.com.belval.api.geraacao.dto;
 import java.time.LocalDate;
 
 import br.com.belval.api.geraacao.model.Instituicao;
+import jakarta.persistence.Column;
 
 public class InstituicaoResponseDTO {
 
@@ -20,6 +21,7 @@ public class InstituicaoResponseDTO {
     private String uf;
     private String imagem;
     private LocalDate data;
+    private boolean ativo;
 
     public InstituicaoResponseDTO(Instituicao instituicao) {
         this.id = instituicao.getId();
@@ -36,6 +38,7 @@ public class InstituicaoResponseDTO {
         this.uf = instituicao.getUf();
         this.imagem = instituicao.getImagem();
         this.data = instituicao.getData();
+        this.ativo = instituicao.isAtivo();
     }
 
     // Getters e Setters
@@ -94,6 +97,8 @@ public class InstituicaoResponseDTO {
     public LocalDate getData() {
         return data;
     }
+
+    public boolean isAtivo() { return ativo; }
 }
 
 

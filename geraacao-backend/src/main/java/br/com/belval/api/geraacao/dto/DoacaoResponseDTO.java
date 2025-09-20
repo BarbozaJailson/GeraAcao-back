@@ -1,6 +1,7 @@
 package br.com.belval.api.geraacao.dto;
 
 import br.com.belval.api.geraacao.model.*;
+import jakarta.persistence.Column;
 import java.time.LocalDate;
 
 public class DoacaoResponseDTO {
@@ -8,6 +9,7 @@ public class DoacaoResponseDTO {
     private String status;
     private int quantidade;
     private LocalDate data;
+    private boolean ativo;
 
     // Dados do usuário
     private Integer usuarioId;
@@ -18,6 +20,7 @@ public class DoacaoResponseDTO {
     private String usuarioCidade;
     private String usuarioUf;
     private String usuarioNumero;
+    private boolean usuarioAtivo;
 
     // Dados da instituição
     private Integer instituicaoId;
@@ -28,6 +31,7 @@ public class DoacaoResponseDTO {
     private String instituicaoCidade;
     private String instituicaoUf;
     private String instituicaoNumero;
+    private boolean instituicaoAtivo;
 
     // Dados do item
     private Integer itemId;
@@ -37,10 +41,13 @@ public class DoacaoResponseDTO {
     private String itemSecao;
     private String itemTipo;
     private String itemImagem;
+    private String itemDescricao;
+    private boolean itemAtivo;
 
     // Dados da requisição
     private Integer requisicaoId;
     private int requisicaoQuantidade;
+    private boolean requisicaoAtivo;
     private String requisicaoStatus;
     private LocalDate requisicaoData;
 
@@ -49,6 +56,7 @@ public class DoacaoResponseDTO {
         this.status = doacao.getStatus();
         this.quantidade = doacao.getQuantidade();
         this.data = doacao.getData();
+        this.ativo = doacao.isAtivo();
 
         Usuario u = doacao.getUsuario();
         if (u != null) {
@@ -60,6 +68,7 @@ public class DoacaoResponseDTO {
             this.usuarioCidade = u.getCidade();
             this.usuarioUf = u.getUf();
             this.usuarioNumero = u.getNumero();
+            this.usuarioAtivo = u.isAtivo();
         }
 
         Requisicao r = doacao.getRequisicao();
@@ -68,6 +77,7 @@ public class DoacaoResponseDTO {
             this.requisicaoQuantidade = r.getQuantidade();
             this.requisicaoStatus = r.getStatus();
             this.requisicaoData = r.getData();
+            this.requisicaoAtivo = r.isAtivo();
 
             Item item = r.getItem();
             if (item != null) {
@@ -78,6 +88,8 @@ public class DoacaoResponseDTO {
                 this.itemSecao = item.getSecao();
                 this.itemTipo = item.getTipo();
                 this.itemImagem = item.getImagem();
+                this.itemDescricao = item.getDescricao();
+                this.itemAtivo = item.isAtivo();
             }
 
             Instituicao inst = r.getInstituicao();
@@ -90,258 +102,126 @@ public class DoacaoResponseDTO {
                 this.instituicaoCidade = inst.getCidade();
                 this.instituicaoUf = inst.getUf();
                 this.instituicaoNumero = inst.getNumero();
+                this.instituicaoAtivo = inst.isAtivo();
             }
         }
     }
 
     // Getters e setters
 
-    public Integer getId() {
-        return id;
-    }
+    public Integer getId() {return id;}
+    public void setId(Integer id) {this.id = id;}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public String getStatus() {return status;}
+    public void setStatus(String status) {this.status = status;}
 
-    public String getStatus() {
-        return status;
-    }
+    public int getQuantidade() {return quantidade;}
+    public void setQuantidade(int quantidade) {this.quantidade = quantidade;}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public LocalDate getData() {return data;}
+    public void setData(LocalDate data) {this.data = data;}
 
-    public int getQuantidade() {
-        return quantidade;
-    }
+    public boolean isAtivo() {return ativo;}
+    public void setAtivo(boolean ativo) {this.ativo = ativo;}
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
+    //Getters ans Setters Usuario
+    public Integer getUsuarioId() {return usuarioId;}
+    public void setUsuarioId(Integer usuarioId) {this.usuarioId = usuarioId;}
 
-    public LocalDate getData() {
-        return data;
-    }
+    public String getUsuarioNome() {return usuarioNome;}
+    public void setUsuarioNome(String usuarioNome) {this.usuarioNome = usuarioNome;}
 
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
+    public String getUsuarioCpf() {return usuarioCpf;}
+    public void setUsuarioCpf(String usuarioCpf) {this.usuarioCpf = usuarioCpf;}
 
-    public Integer getUsuarioId() {
-        return usuarioId;
-    }
+    public String getUsuarioLogradouro() {return usuarioLogradouro;}
+    public void setUsuarioLogradouro(String usuarioLogradouro) {this.usuarioLogradouro = usuarioLogradouro;}
 
-    public void setUsuarioId(Integer usuarioId) {
-        this.usuarioId = usuarioId;
-    }
+    public String getUsuarioBairro() {return usuarioBairro;}
+    public void setUsuarioBairro(String usuarioBairro) {this.usuarioBairro = usuarioBairro;}
 
-    public String getUsuarioNome() {
-        return usuarioNome;
-    }
+    public String getUsuarioCidade() {return usuarioCidade;}
+    public void setUsuarioCidade(String usuarioCidade) {this.usuarioCidade = usuarioCidade;}
 
-    public void setUsuarioNome(String usuarioNome) {
-        this.usuarioNome = usuarioNome;
-    }
+    public String getUsuarioUf() {return usuarioUf;}
+    public void setUsuarioUf(String usuarioUf) {this.usuarioUf = usuarioUf;}
 
-    public String getUsuarioCpf() {
-        return usuarioCpf;
-    }
+    public String getUsuarioNumero() {return usuarioNumero;}
+    public void setUsuarioNumero(String usuarioNumero) {this.usuarioNumero = usuarioNumero;}
 
-    public void setUsuarioCpf(String usuarioCpf) {
-        this.usuarioCpf = usuarioCpf;
-    }
+    public boolean isUsuarioAtivo() {return usuarioAtivo;}
+    public void setUsuarioAtivo(boolean usuarioAtivo) {this.usuarioAtivo = usuarioAtivo;}
 
-    public String getUsuarioLogradouro() {
-        return usuarioLogradouro;
-    }
+    //Getters and Setters Instituição
+    public Integer getInstituicaoId() {return instituicaoId;}
+    public void setInstituicaoId(Integer instituicaoId) {this.instituicaoId = instituicaoId;}
 
-    public void setUsuarioLogradouro(String usuarioLogradouro) {
-        this.usuarioLogradouro = usuarioLogradouro;
-    }
+    public String getInstituicaoNome() {return instituicaoNome;}
+    public void setInstituicaoNome(String instituicaoNome) {this.instituicaoNome = instituicaoNome;}
 
-    public String getUsuarioBairro() {
-        return usuarioBairro;
-    }
+    public String getInstituicaoCnpj() {return instituicaoCnpj;}
+    public void setInstituicaoCnpj(String instituicaoCnpj) {this.instituicaoCnpj = instituicaoCnpj;}
 
-    public void setUsuarioBairro(String usuarioBairro) {
-        this.usuarioBairro = usuarioBairro;
-    }
+    public String getInstituicaoLogradouro() {return instituicaoLogradouro;}
+    public void setInstituicaoLogradouro(String instituicaoLogradouro) {this.instituicaoLogradouro = instituicaoLogradouro;}
 
-    public String getUsuarioCidade() {
-        return usuarioCidade;
-    }
+    public String getInstituicaoBairro() {return instituicaoBairro;}
+    public void setInstituicaoBairro(String instituicaoBairro) {this.instituicaoBairro = instituicaoBairro;}
 
-    public void setUsuarioCidade(String usuarioCidade) {
-        this.usuarioCidade = usuarioCidade;
-    }
+    public String getInstituicaoCidade() {return instituicaoCidade;}
+    public void setInstituicaoCidade(String instituicaoCidade) {this.instituicaoCidade = instituicaoCidade;}
 
-    public String getUsuarioUf() {
-        return usuarioUf;
-    }
+    public String getInstituicaoUf() {return instituicaoUf;}
+    public void setInstituicaoUf(String instituicaoUf) {this.instituicaoUf = instituicaoUf;}
 
-    public void setUsuarioUf(String usuarioUf) {
-        this.usuarioUf = usuarioUf;
-    }
+    public String getInstituicaoNumero() {return instituicaoNumero;}
+    public void setInstituicaoNumero(String instituicaoNumero) {this.instituicaoNumero = instituicaoNumero;}
 
-    public String getUsuarioNumero() {
-        return usuarioNumero;
-    }
+    public boolean isInstituicaoAtivo() {return instituicaoAtivo;}
+    public void setInstituicaoAtivo(boolean instituicaoAtivo) {this.instituicaoAtivo = instituicaoAtivo;}
 
-    public void setUsuarioNumero(String usuarioNumero) {
-        this.usuarioNumero = usuarioNumero;
-    }
+    //Getters and Setters Item
+    public Integer getItemId() {return itemId;}
+    public void setItemId(Integer itemId) {this.itemId = itemId;}
 
-    public Integer getInstituicaoId() {
-        return instituicaoId;
-    }
+    public String getItemNome() {return itemNome;}
+    public void setItemNome(String itemNome) {this.itemNome = itemNome;}
 
-    public void setInstituicaoId(Integer instituicaoId) {
-        this.instituicaoId = instituicaoId;
-    }
+    public String getItemTamanho() {return itemTamanho;}
+    public void setItemTamanho(String itemTamanho) {this.itemTamanho = itemTamanho;}
 
-    public String getInstituicaoNome() {
-        return instituicaoNome;
-    }
+    public String getItemGenero() {return itemGenero;}
+    public void setItemGenero(String itemGenero) {this.itemGenero = itemGenero;}
 
-    public void setInstituicaoNome(String instituicaoNome) {
-        this.instituicaoNome = instituicaoNome;
-    }
+    public String getItemSecao() {return itemSecao;}
+    public void setItemSecao(String itemSecao) {this.itemSecao = itemSecao;}
 
-    public String getInstituicaoCnpj() {
-        return instituicaoCnpj;
-    }
+    public String getItemTipo() {return itemTipo;}
+    public void setItemTipo(String itemTipo) {this.itemTipo = itemTipo;}
 
-    public void setInstituicaoCnpj(String instituicaoCnpj) {
-        this.instituicaoCnpj = instituicaoCnpj;
-    }
+    public String getItemImagem() {return itemImagem;}
+    public void setItemImagem(String itemImagem) {this.itemImagem = itemImagem;}
 
-    public String getInstituicaoLogradouro() {
-        return instituicaoLogradouro;
-    }
+    public String getItemDescricao() {return itemDescricao;}
+    public void setItemDescricao(String itemDescricao) {this.itemDescricao = itemDescricao;}
 
-    public void setInstituicaoLogradouro(String instituicaoLogradouro) {
-        this.instituicaoLogradouro = instituicaoLogradouro;
-    }
+    public boolean isItemAtivo() {return itemAtivo;}
+    public void setItemAtivo(boolean itemAtivo) {this.itemAtivo = itemAtivo;}
 
-    public String getInstituicaoBairro() {
-        return instituicaoBairro;
-    }
+    //Getters and Setters Requisição
+    public Integer getRequisicaoId() {return requisicaoId;}
+    public void setRequisicaoId(Integer requisicaoId) {this.requisicaoId = requisicaoId;}
 
-    public void setInstituicaoBairro(String instituicaoBairro) {
-        this.instituicaoBairro = instituicaoBairro;
-    }
+    public int getRequisicaoQuantidade() {return requisicaoQuantidade;}
+    public void setRequisicaoQuantidade(int requisicaoQuantidade) {this.requisicaoQuantidade = requisicaoQuantidade;}
 
-    public String getInstituicaoCidade() {
-        return instituicaoCidade;
-    }
+    public String getRequisicaoStatus() {return requisicaoStatus;}
+    public void setRequisicaoStatus(String requisicaoStatus) {this.requisicaoStatus = requisicaoStatus;}
 
-    public void setInstituicaoCidade(String instituicaoCidade) {
-        this.instituicaoCidade = instituicaoCidade;
-    }
+    public LocalDate getRequisicaoData() {return requisicaoData;}
+    public void setRequisicaoData(LocalDate requisicaoData) {this.requisicaoData = requisicaoData;}
 
-    public String getInstituicaoUf() {
-        return instituicaoUf;
-    }
-
-    public void setInstituicaoUf(String instituicaoUf) {
-        this.instituicaoUf = instituicaoUf;
-    }
-
-    public String getInstituicaoNumero() {
-        return instituicaoNumero;
-    }
-
-    public void setInstituicaoNumero(String instituicaoNumero) {
-        this.instituicaoNumero = instituicaoNumero;
-    }
-
-    public Integer getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(Integer itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getItemNome() {
-        return itemNome;
-    }
-
-    public void setItemNome(String itemNome) {
-        this.itemNome = itemNome;
-    }
-
-    public String getItemTamanho() {
-        return itemTamanho;
-    }
-
-    public void setItemTamanho(String itemTamanho) {
-        this.itemTamanho = itemTamanho;
-    }
-
-    public String getItemGenero() {
-        return itemGenero;
-    }
-
-    public void setItemGenero(String itemGenero) {
-        this.itemGenero = itemGenero;
-    }
-
-    public String getItemSecao() {
-        return itemSecao;
-    }
-
-    public void setItemSecao(String itemSecao) {
-        this.itemSecao = itemSecao;
-    }
-
-    public String getItemTipo() {
-        return itemTipo;
-    }
-
-    public void setItemTipo(String itemTipo) {
-        this.itemTipo = itemTipo;
-    }
-
-    public String getItemImagem() {
-        return itemImagem;
-    }
-
-    public void setItemImagem(String itemImagem) {
-        this.itemImagem = itemImagem;
-    }
-
-    public Integer getRequisicaoId() {
-        return requisicaoId;
-    }
-
-    public void setRequisicaoId(Integer requisicaoId) {
-        this.requisicaoId = requisicaoId;
-    }
-
-    public int getRequisicaoQuantidade() {
-        return requisicaoQuantidade;
-    }
-
-    public void setRequisicaoQuantidade(int requisicaoQuantidade) {
-        this.requisicaoQuantidade = requisicaoQuantidade;
-    }
-
-    public String getRequisicaoStatus() {
-        return requisicaoStatus;
-    }
-
-    public void setRequisicaoStatus(String requisicaoStatus) {
-        this.requisicaoStatus = requisicaoStatus;
-    }
-
-    public LocalDate getRequisicaoData() {
-        return requisicaoData;
-    }
-
-    public void setRequisicaoData(LocalDate requisicaoData) {
-        this.requisicaoData = requisicaoData;
-    }
+    public boolean isRequisicaoAtivo() {return requisicaoAtivo;}
+    public void setRequisicaoAtivo(boolean requisicaoAtivo) {this.requisicaoAtivo = requisicaoAtivo;}
 }
 

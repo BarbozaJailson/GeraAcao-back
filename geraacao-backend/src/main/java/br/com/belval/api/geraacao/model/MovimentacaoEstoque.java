@@ -41,6 +41,8 @@ public class MovimentacaoEstoque {
     @ManyToOne
     @JoinColumn(name = "id_instituicao", nullable = false)
     private Instituicao instituicao;
+    @Column(name = "ativo", nullable = false, length = 1)
+    private boolean ativo;
     @ManyToOne
     @JoinColumn(name = "id_campanha")
     private Campanha campanha;
@@ -63,8 +65,6 @@ public class MovimentacaoEstoque {
         this.requisicao = requisicao;
         this.doacao = doacao;
     }
-
-
 
     public Integer getId() {
         return id;
@@ -137,5 +137,9 @@ public class MovimentacaoEstoque {
     public void setInstituicao(Instituicao instituicao) {
         this.instituicao = instituicao;
     }
+
+    public boolean isAtivo() {return ativo;}
+
+    public void setAtivo(boolean ativo) {this.ativo = ativo;}
 }
 

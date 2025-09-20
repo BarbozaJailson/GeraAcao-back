@@ -10,7 +10,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import br.com.belval.api.geraacao.exception.ResourceNotFoundException;
+import br.com.belval.api.geraacao.model.TipoUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,15 +29,28 @@ import jakarta.validation.Valid;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService{
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+
     private static final String UPLOAD_DIR = "uploads/";
     @Autowired
-    private InstituicaoRepository instituicaoRepository;
+    private final InstituicaoRepository instituicaoRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    // Injeção via construtor (recomendada)
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository,
+                          PasswordEncoder passwordEncoder, InstituicaoRepository instituicaoRepository) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.instituicaoRepository = instituicaoRepository;
+    }
+
     @Override
     @Transactional
     public UsuarioResponseDTO criarUsuario(@Valid UsuarioCreateDTO dto) {
         try {
+            if (usuarioRepository.findByEmail(dto.getEmail()).isPresent()) {
+                throw new IllegalArgumentException("E-mail já cadastrado");
+            }
             String fileName = null;
             if (dto.getImagem() != null && !dto.getImagem().isEmpty()) {
                 fileName = salvarImagem(dto.getImagem());
@@ -52,7 +67,7 @@ public class UsuarioServiceImpl implements UsuarioService{
             usuario.setNome(dto.getNome());
             usuario.setTelefone(dto.getTelefone());
             usuario.setTipoLogradouro(dto.getTipoLogradouro());
-            usuario.setTipoUser(dto.getTipoUser());
+            usuario.setTipoUser(TipoUser.valueOf(dto.getTipoUser()));
             usuario.setUf(dto.getUf());
             usuario.setImagem(fileName != null ? "/uploads/" + fileName : null);
             usuario.setSenha(dto.getSenha());
@@ -65,11 +80,6 @@ public class UsuarioServiceImpl implements UsuarioService{
             return new UsuarioResponseDTO(novoUsuario);
         } catch (IOException e) {
             throw new RuntimeException("Erro ao salvar imagem: " + e.getMessage(), e);
-        } catch (EntityNotFoundException e) {
-            throw new RuntimeException("Instituição inválida: " + e.getMessage(), e);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Erro inesperado ao criar usuário: " + e.getMessage(), e);
         }
     }
     @Override
@@ -89,7 +99,7 @@ public class UsuarioServiceImpl implements UsuarioService{
             if (dto.getNumero() != null) { usuario.setNumero(dto.getNumero()); }
             if (dto.getTelefone() != null) { usuario.setTelefone(dto.getTelefone()); }
             if (dto.getTipoLogradouro() != null) { usuario.setTipoLogradouro(dto.getTipoLogradouro()); }
-            if (dto.getTipoUser() != null) { usuario.setTipoUser(dto.getTipoUser()); }
+            if (dto.getTipoUser() != null) { usuario.setTipoUser(TipoUser.valueOf(dto.getTipoUser())); }
             if (dto.getUf() != null) { usuario.setUf(dto.getUf()); }
             if (dto.getImagem() != null && !dto.getImagem().isEmpty()) {
                 if (usuario.getImagem() != null) {
@@ -182,22 +192,24 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
     @Override
     @Transactional(readOnly = true)
-    public UsuarioResponseDTO login(String login, String senha) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(login);
-        if (usuarioOpt.isEmpty()) {
-            throw new ResourceNotFoundException("Usuário não encontrado");
+    public Usuario loginEntity(String login, String senha) {
+        Usuario usuario = usuarioRepository.findByEmail(login)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+
+        // Verifica senha usando BCrypt
+        if (!passwordEncoder.matches(senha, usuario.getSenha())) {
+            throw new SecurityException("Senha incorreta");
         }
-        Usuario usuario = usuarioOpt.get();
-        if (usuario.getSenha() == null || !usuario.getSenha().equals(senha)) {
-            throw new IllegalArgumentException("Senha incorreta");
-        }
-        // Verifica se o tipo de usuário é permitido
-        String tipo = usuario.getTipoUser();
-        if (!"ADMINISTRADOR".equalsIgnoreCase(tipo) && !"GERENCIADOR".equalsIgnoreCase(tipo)) {
+
+        // Verifica tipo de usuário permitido
+        TipoUser tipo = usuario.getTipoUser();
+        if (tipo != TipoUser.ADMIN_N1 && tipo != TipoUser.GERENCIADOR) {
             throw new SecurityException("Tipo de usuário não autorizado");
         }
-        return new UsuarioResponseDTO(usuario);
+
+        return usuario; // Retorna a entity
     }
+
 
 }
 

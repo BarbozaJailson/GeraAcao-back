@@ -20,6 +20,7 @@ public class EstoqueResponseDTO {
     private String itemTipo;
     private String itemDescricao;
     private String itemMaterial;
+    private boolean itemAtivo;
 
     // dados exclusivos da instituicao
     private Integer instituicaoId;
@@ -36,6 +37,7 @@ public class EstoqueResponseDTO {
     private String instituicaoUf;
     private String instituicaoImagem;
     private LocalDate instituicaoData;
+    private boolean instituicaoAtivo;
 
     public EstoqueResponseDTO(Estoque estoque) {
 
@@ -55,6 +57,7 @@ public class EstoqueResponseDTO {
                 this.itemTipo = item.getTipo();
                 this.itemDescricao = item.getDescricao();
                 this.itemMaterial = item.getMaterial();
+                this.itemAtivo = item.isAtivo();
             }
 
             // dados da instituição
@@ -74,177 +77,91 @@ public class EstoqueResponseDTO {
                 this.instituicaoUf = instituicao.getUf();
                 this.instituicaoImagem = instituicao.getImagem();
                 this.instituicaoData = instituicao.getData();
+                this.instituicaoAtivo = instituicao.isAtivo();
             }
         }
 
     }
 
-    public Integer getEstoqueId() {
-        return estoqueId;
-    }
-    public void setEstoqueId(Integer estoqueId) {
-        this.estoqueId = estoqueId;
-    }
+    //Getters and Setters Estoque
+    public Integer getEstoqueId() {return estoqueId;}
+    public void setEstoqueId(Integer estoqueId) {this.estoqueId = estoqueId;}
 
-    public Integer getEstoqueQuantidade() {
-        return estoqueQuantidade;
-    }
-    public void setEstoqueQuantidade(Integer estoqueQuantidade) {
-        this.estoqueQuantidade = estoqueQuantidade;
-    }
+    public Integer getEstoqueQuantidade() {return estoqueQuantidade;}
+    public void setEstoqueQuantidade(Integer estoqueQuantidade) {this.estoqueQuantidade = estoqueQuantidade;}
 
-    public Integer getItemId() {
-        return itemId;
-    }
-    public void setItemId(Integer itemId) {
-        this.itemId = itemId;
-    }
+    //Getters and Setters Item
+    public Integer getItemId() {return itemId;}
+    public void setItemId(Integer itemId) {this.itemId = itemId;}
 
-    public String getItemNome() {
-        return itemNome;
-    }
-    public void setItemNome(String itemNome) {
-        this.itemNome = itemNome;
-    }
+    public String getItemNome() {return itemNome;}
+    public void setItemNome(String itemNome) {this.itemNome = itemNome;}
 
-    public String getItemGenero() {
-        return itemGenero;
-    }
-    public void setItemGenero(String itemGenero) {
-        this.itemGenero = itemGenero;
-    }
+    public String getItemGenero() {return itemGenero;}
+    public void setItemGenero(String itemGenero) {this.itemGenero = itemGenero;}
 
-    public String getItemSecao() {
-        return itemSecao;
-    }
-    public void setItemSecao(String itemSecao) {
-        this.itemSecao = itemSecao;
-    }
+    public String getItemSecao() {return itemSecao;}
+    public void setItemSecao(String itemSecao) {this.itemSecao = itemSecao;}
 
-    public String getItemTamanho() {
-        return itemTamanho;
-    }
-    public void setItemTamanho(String itemTamanho) {
-        this.itemTamanho = itemTamanho;
-    }
+    public String getItemTamanho() {return itemTamanho;}
+    public void setItemTamanho(String itemTamanho) {this.itemTamanho = itemTamanho;}
 
-    public String getItemTipo() {
-        return itemTipo;
-    }
-    public void setItemTipo(String itemTipo) {
-        this.itemTipo = itemTipo;
-    }
+    public String getItemTipo() {return itemTipo;}
+    public void setItemTipo(String itemTipo) {this.itemTipo = itemTipo;}
 
-    public String getItemDescricao() {
-        return itemDescricao;
-    }
-    public void setItemDescricao(String itemDescricao) {
-        this.itemDescricao = itemDescricao;
-    }
+    public String getItemDescricao() {return itemDescricao;}
+    public void setItemDescricao(String itemDescricao) {this.itemDescricao = itemDescricao;}
 
-    public String getItemMaterial() {
-        return itemMaterial;
-    }
-    public void setItemMaterial(String itemMaterial) {
-        this.itemMaterial = itemMaterial;
-    }
+    public String getItemMaterial() {return itemMaterial;}
+    public void setItemMaterial(String itemMaterial) {this.itemMaterial = itemMaterial;}
 
-    public Integer getInstituicaoId() {
-        return instituicaoId;
-    }
-    public void setInstituicaoId(Integer instituicaoId) {
-        this.instituicaoId = instituicaoId;
-    }
+    public boolean isItemAtivo() {return itemAtivo;}
+    public void setItemAtivo(boolean itemAtivo) {this.itemAtivo = itemAtivo;}
 
-    public String getInstituicaoNome() {
-        return instituicaoNome;
-    }
-    public void setInstituicaoNome(String instituicaoNome) {
-        this.instituicaoNome = instituicaoNome;
-    }
+    //Getters and Setters Instituição
+    public Integer getInstituicaoId() {return instituicaoId;}
+    public void setInstituicaoId(Integer instituicaoId) {this.instituicaoId = instituicaoId;}
 
-    public String getInstituicaoCnpj() {
-        return instituicaoCnpj;
-    }
-    public void setInstituicaoCnpj(String instituicaoCnpj) {
-        this.instituicaoCnpj = instituicaoCnpj;
-    }
+    public String getInstituicaoNome() {return instituicaoNome;}
+    public void setInstituicaoNome(String instituicaoNome) {this.instituicaoNome = instituicaoNome;}
 
-    public String getInstituicaoTelefone() {
-        return instituicaoTelefone;
-    }
-    public void setInstituicaoTelefone(String instituicaoTelefone) {
-        this.instituicaoTelefone = instituicaoTelefone;
-    }
+    public String getInstituicaoCnpj() {return instituicaoCnpj;}
+    public void setInstituicaoCnpj(String instituicaoCnpj) {this.instituicaoCnpj = instituicaoCnpj;}
 
-    public String getInstituicaoEmail() {
-        return instituicaoEmail;
-    }
-    public void setInstituicaoEmail(String instituicaoEmail) {
-        this.instituicaoEmail = instituicaoEmail;
-    }
+    public String getInstituicaoTelefone() {return instituicaoTelefone;}
+    public void setInstituicaoTelefone(String instituicaoTelefone) {this.instituicaoTelefone = instituicaoTelefone;}
 
-    public String getInstituicaoCep() {
-        return instituicaoCep;
-    }
-    public void setInstituicaoCep(String instituicaoCep) {
-        this.instituicaoCep = instituicaoCep;
-    }
+    public String getInstituicaoEmail() {return instituicaoEmail;}
+    public void setInstituicaoEmail(String instituicaoEmail) {this.instituicaoEmail = instituicaoEmail;}
 
-    public String getInstituicaoTipoLogradouro() {
-        return instituicaoTipoLogradouro;
-    }
-    public void setInstituicaoTipoLogradouro(String instituicaoTipoLogradouro) {
-        this.instituicaoTipoLogradouro = instituicaoTipoLogradouro;
-    }
+    public String getInstituicaoCep() {return instituicaoCep;}
+    public void setInstituicaoCep(String instituicaoCep) {this.instituicaoCep = instituicaoCep;}
 
-    public String getInstituicaoLogradouro() {
-        return instituicaoLogradouro;
-    }
-    public void setInstituicaoLogradouro(String instituicaoLogradouro) {
-        this.instituicaoLogradouro = instituicaoLogradouro;
-    }
+    public String getInstituicaoTipoLogradouro() {return instituicaoTipoLogradouro;}
+    public void setInstituicaoTipoLogradouro(String instituicaoTipoLogradouro) {this.instituicaoTipoLogradouro = instituicaoTipoLogradouro;}
 
-    public String getInstituicaoNumero() {
-        return instituicaoNumero;
-    }
-    public void setInstituicaoNumero(String instituicaoNumero) {
-        this.instituicaoNumero = instituicaoNumero;
-    }
+    public String getInstituicaoLogradouro() {return instituicaoLogradouro;}
+    public void setInstituicaoLogradouro(String instituicaoLogradouro) {this.instituicaoLogradouro = instituicaoLogradouro;}
 
-    public String getInstituicaoBairro() {
-        return instituicaoBairro;
-    }
-    public void setInstituicaoBairro(String instituicaoBairro) {
-        this.instituicaoBairro = instituicaoBairro;
-    }
+    public String getInstituicaoNumero() {return instituicaoNumero;}
+    public void setInstituicaoNumero(String instituicaoNumero) {this.instituicaoNumero = instituicaoNumero;}
 
-    public String getInstituicaoCidade() {
-        return instituicaoCidade;
-    }
-    public void setInstituicaoCidade(String instituicaoCidade) {
-        this.instituicaoCidade = instituicaoCidade;
-    }
+    public String getInstituicaoBairro() {return instituicaoBairro;}
+    public void setInstituicaoBairro(String instituicaoBairro) {this.instituicaoBairro = instituicaoBairro;}
 
-    public String getInstituicaoUf() {
-        return instituicaoUf;
-    }
-    public void setInstituicaoUf(String instituicaoUf) {
-        this.instituicaoUf = instituicaoUf;
-    }
+    public String getInstituicaoCidade() {return instituicaoCidade;}
+    public void setInstituicaoCidade(String instituicaoCidade) {this.instituicaoCidade = instituicaoCidade;}
 
-    public String getInstituicaoImagem() {
-        return instituicaoImagem;
-    }
-    public void setInstituicaoImagem(String instituicaoImagem) {
-        this.instituicaoImagem = instituicaoImagem;
-    }
+    public String getInstituicaoUf() {return instituicaoUf;}
+    public void setInstituicaoUf(String instituicaoUf) {this.instituicaoUf = instituicaoUf;}
 
-    public LocalDate getInstituicaoData() {
-        return instituicaoData;
-    }
-    public void setInstituicaoData(LocalDate instituicaoData) {
-        this.instituicaoData = instituicaoData;
-    }
+    public String getInstituicaoImagem() {return instituicaoImagem;}
+    public void setInstituicaoImagem(String instituicaoImagem) {this.instituicaoImagem = instituicaoImagem;}
+
+    public LocalDate getInstituicaoData() {return instituicaoData;}
+    public void setInstituicaoData(LocalDate instituicaoData) {this.instituicaoData = instituicaoData;}
+
+    public boolean isInstituicaoAtivo() {return instituicaoAtivo;}
+    public void setInstituicaoAtivo(boolean instituicaoAtivo) {this.instituicaoAtivo = instituicaoAtivo;}
 }
 

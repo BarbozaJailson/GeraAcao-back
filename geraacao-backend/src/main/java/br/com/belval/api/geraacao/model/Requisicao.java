@@ -33,6 +33,8 @@ public class Requisicao {
     @NotBlank(message = "O Status é obrigatório")
     @Size(max = 15, message = "O Statuss deve ter no máximo 15 caracteres")
     private String status;
+    @Column(name = "ativo", nullable = false, length = 1)
+    private boolean ativo;
     @ManyToOne
     @JoinColumn(name = "id_instituicao", nullable = false)
     @NotNull(message = "A instituição é obrigatória")
@@ -126,6 +128,14 @@ public class Requisicao {
     }
     public void adicionarDoacao(int quantidade) {
         this.quantidadeAtendida += quantidade;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     @Override

@@ -12,6 +12,7 @@ public class RequisicaoResponseDTO {
     private LocalDate data;
     private String status;
     private int saldo;
+    private boolean ativo;
 
     // Dados Instituicao
     private Integer instituicaoId;
@@ -63,139 +64,44 @@ public class RequisicaoResponseDTO {
         }
     }
 
-    public Integer getId() {
-        return id;
-    }
-    public int getQuantidade() {
-        return quantidade;
-    }
-    public LocalDate getData() {
-        return data;
-    }
-    public String getStatus() {
-        return status;
-    }
-    public Integer getInstituicaoId() {
-        return instituicaoId;
-    }
-    public String getInstituicaoNome() {
-        return instituicaoNome;
-    }
-    public String getInstituicaoCnpj() {
-        return instituicaoCnpj;
-    }
-    public String getInstituicaoLogradouro() {
-        return instituicaoLogradouro;
-    }
-    public String getInstituicaoBairro() {
-        return instituicaoBairro;
-    }
-    public String getInstituicaoCidade() {
-        return instituicaoCidade;
-    }
-    public String getInstituicaoUf() {
-        return instituicaoUf;
-    }
-    public String getInstituicaoNumero() {
-        return instituicaoNumero;
-    }
-    public Integer getItemId() {
-        return itemId;
-    }
-    public String getItemNome() {
-        return itemNome;
-    }
-    public String getItemTamanho() {
-        return itemTamanho;
-    }
-    public String getItemGenero() {
-        return itemGenero;
-    }
-    public String getItemSecao() {
-        return itemSecao;
-    }
-    public String getItemTipo() {
-        return itemTipo;
-    }
-    public String getItemMaterial(){
-        return itemMaterial;
-    }
-    public String getItemDescricao(){
-        return itemDescricao;
-    }
-    public String getItemImagem() {
-        return itemImagem;
-    }
+    //Getters Requisição
+    public Integer getId() {return id;}
+    public void setId(Integer id) {this.id = id;}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
-    public void setInstituicaoId(Integer instituicaoId) {
-        this.instituicaoId = instituicaoId;
-    }
-    public void setInstituicaoNome(String instituicaoNome) {
-        this.instituicaoNome = instituicaoNome;
-    }
-    public void setInstituicaoCnpj(String instituicaoCnpj) {
-        this.instituicaoCnpj = instituicaoCnpj;
-    }
-    public void setInstituicaoLogradouro(String instituicaoLogradouro) {
-        this.instituicaoLogradouro = instituicaoLogradouro;
-    }
-    public void setInstituicaoBairro(String instituicaoBairro) {
-        this.instituicaoBairro = instituicaoBairro;
-    }
-    public void setInstituicaoCidade(String instituicaoCidade) {
-        this.instituicaoCidade = instituicaoCidade;
-    }
-    public void setInstituicaoUf(String instituicaoUf) {
-        this.instituicaoUf = instituicaoUf;
-    }
-    public void setInstituicaoNumero(String instituicaoNumero) {
-        this.instituicaoNumero = instituicaoNumero;
-    }
-    public void setItemId(Integer itemId) {
-        this.itemId = itemId;
-    }
-    public void setItemNome(String itemNome) {
-        this.itemNome = itemNome;
-    }
-    public void setItemTamanho(String itemTamanho) {
-        this.itemTamanho = itemTamanho;
-    }
-    public void setItemGenero(String itemGenero) {
-        this.itemGenero = itemGenero;
-    }
-    public void setItemSecao(String itemSecao) {
-        this.itemSecao = itemSecao;
-    }
-    public void setItemTipo(String itemTipo) {
-        this.itemTipo = itemTipo;
-    }
-    public void setItemMaterial(String itemMaterial){
-        this.itemMaterial = itemMaterial;
-    }
-    public void setItemDescricao(String itemDescricao) {
-        this.itemDescricao = itemDescricao;
-    }
-    public void setItemImagem(String itemImagem) {
-        this.itemImagem = itemImagem;
-    }
-    public int getSaldo() {
-        return saldo;
-    }
-    public void setSaldo(int saldo) {
-        this.saldo = saldo;
-    }
+    public int getQuantidade() {return quantidade;}
+    public void setQuantidade(int quantidade) {this.quantidade = quantidade;}
+
+    public LocalDate getData() {return data;}
+    public void setData(LocalDate data) {this.data = data;}
+
+    public String getStatus() {return status;}
+    public void setStatus(String status) {this.status = status;}
+
+    public int getSaldo() {return saldo;}
+    public void setSaldo(int saldo) {this.saldo = saldo;}
+
+    //Getters Instituição
+    public Integer getInstituicaoId() {return instituicaoId;}
+    public void setInstituicaoId(Integer instituicaoId) {this.instituicaoId = instituicaoId;}
+    public String getInstituicaoNome() {return instituicaoNome;}
+    public String getInstituicaoCnpj() {return instituicaoCnpj;}
+    public String getInstituicaoLogradouro() {return instituicaoLogradouro;}
+    public String getInstituicaoBairro() {return instituicaoBairro;}
+    public String getInstituicaoCidade() {return instituicaoCidade;}
+    public String getInstituicaoUf() {return instituicaoUf;}
+    public String getInstituicaoNumero() {return instituicaoNumero;}
+
+    //Getters Item
+    public Integer getItemId() {return itemId;}
+    public void setItemId(Integer itemId) {this.itemId = itemId;}
+    public String getItemNome() {return itemNome;}
+    public String getItemTamanho() {return itemTamanho;}
+    public String getItemGenero() {return itemGenero;}
+    public String getItemSecao() {return itemSecao;}
+    public String getItemTipo() {return itemTipo;}
+    public String getItemMaterial(){return itemMaterial;}
+    public String getItemDescricao(){return itemDescricao;}
+    public String getItemImagem() {return itemImagem;}
 }
 
 

@@ -56,6 +56,8 @@ public class Campanha {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "data_cadastro")
     private LocalDate dataCadastro;
+    @Column(name = "ativo", nullable = false, length = 1)
+    private boolean ativo;
     //Relacionamento com 'Item'
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_item", nullable = false)
@@ -163,6 +165,8 @@ public class Campanha {
     public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
+    public boolean isAtivo() {return ativo;}
+    public void setAtivo(boolean ativo) {this.ativo = ativo;}
     public Item getItem() {
         return item;
     }

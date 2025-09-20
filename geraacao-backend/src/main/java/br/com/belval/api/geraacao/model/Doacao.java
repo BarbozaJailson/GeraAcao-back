@@ -16,26 +16,23 @@ public class Doacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     @Column(name = "status", nullable = false, length = 15)
     @NotBlank(message = "O Status é obrigatório")
     @Size(max = 15, message = "O Status deve ter no máximo 15 caracteres")
     private String status;
-
     @PositiveOrZero(message = "A quantidade deve ser zero ou maior")
     @Column(name = "quantidade", nullable = false)
     private int quantidade;
-
     @Column(name = "data")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate data;
-
+    @Column(name = "ativo", nullable = false, length = 1)
+    private boolean ativo;
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
     @NotNull(message = "O Usuario é obrigatório")
     private Usuario usuario;
-
     @ManyToOne
     @JoinColumn(name = "id_requisicao", nullable = false)
     @NotNull(message = "A Requisicao é obrigatória")
@@ -47,7 +44,7 @@ public class Doacao {
     }
 
     //	Construtor
-    public Doacao(Integer id, String status, int quantidade, LocalDate data, Usuario usuario, Requisicao requisicao) {
+    public Doacao(Integer id, String status, int quantidade, LocalDate data, Usuario usuario, Requisicao requisicao, boolean ativo) {
         super();
         this.id = id;
         this.status = status;
@@ -55,6 +52,7 @@ public class Doacao {
         this.data = data;
         this.usuario = usuario;
         this.requisicao = requisicao;
+        this.ativo = ativo;
     }
 
     @PrePersist
@@ -104,7 +102,8 @@ public class Doacao {
     public void setRequisicao(Requisicao requisicao) {
         this.requisicao = requisicao;
     }
-
+    public boolean isAtivo() {return ativo;}
+    public void setAtivo(boolean ativo) {this.ativo = ativo;}
 
     @Override
     public boolean equals(Object o) {

@@ -14,31 +14,23 @@ public class MovimentacaoEstoqueCreateDTO {
 
     @NotNull(message = "Id do item é obrigatório")
     private Integer itemId;
-
     @Min(value = 1, message = "Quantidade deve ser maior que zero")
     private int quantidade;
-
     @NotNull(message = "Tipo de movimentação é obrigatório")
     private TipoMovimentacao tipoMovimentacao;
-
     private LocalDateTime dataMovimentacao; // opcional
-
     @Size(max = 255)
     private String observacao;
-
     private Integer requisicaoId;
-
     private Integer doacaoId;
-
     private Integer instituicaoId;
-
 
     public MovimentacaoEstoqueCreateDTO() {}
 
+    // getters e setters
     public Integer getItemId() {
         return itemId;
     }
-
     public void setItemId(Integer itemId) {
         this.itemId = itemId;
     }
@@ -46,7 +38,6 @@ public class MovimentacaoEstoqueCreateDTO {
     public int getQuantidade() {
         return quantidade;
     }
-
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
@@ -54,7 +45,6 @@ public class MovimentacaoEstoqueCreateDTO {
     public TipoMovimentacao getTipoMovimentacao() {
         return tipoMovimentacao;
     }
-
     public void setTipoMovimentacao(TipoMovimentacao tipoMovimentacao) {
         this.tipoMovimentacao = tipoMovimentacao;
     }
@@ -62,7 +52,6 @@ public class MovimentacaoEstoqueCreateDTO {
     public LocalDateTime getDataMovimentacao() {
         return dataMovimentacao;
     }
-
     public void setDataMovimentacao(LocalDateTime dataMovimentacao) {
         this.dataMovimentacao = dataMovimentacao;
     }
@@ -70,7 +59,6 @@ public class MovimentacaoEstoqueCreateDTO {
     public String getObservacao() {
         return observacao;
     }
-
     public void setObservacao(String observacao) {
         this.observacao = observacao;
     }
@@ -78,7 +66,6 @@ public class MovimentacaoEstoqueCreateDTO {
     public Integer getRequisicaoId() {
         return requisicaoId;
     }
-
     public void setRequisicaoId(Integer requisicaoId) {
         this.requisicaoId = requisicaoId;
     }
@@ -86,7 +73,6 @@ public class MovimentacaoEstoqueCreateDTO {
     public Integer getDoacaoId() {
         return doacaoId;
     }
-
     public void setDoacaoId(Integer doacaoId) {
         this.doacaoId = doacaoId;
     }
@@ -94,12 +80,8 @@ public class MovimentacaoEstoqueCreateDTO {
     public Integer getInstituicaoId() {
         return instituicaoId;
     }
+    public void setInstituicaoId(Integer instituicaoId) {this.instituicaoId = instituicaoId;}
 
-    public void setInstituicaoId(Integer instituicaoId) {
-        this.instituicaoId = instituicaoId;
-    }
-
-    // getters e setters
 
 }
 

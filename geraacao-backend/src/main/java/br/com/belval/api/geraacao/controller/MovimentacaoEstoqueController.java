@@ -11,7 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/movimentacaoestoque")
+@RequestMapping("/api/auth/movimentacaoestoque")
 @CrossOrigin("http://localhost:5173")
 public class MovimentacaoEstoqueController {
 

@@ -50,6 +50,8 @@ public class Item {
     private String descricao;
     @Column(name = "imagem", nullable = true)
     private String imagem;
+    @Column(name = "ativo", nullable = false, length = 1)
+    private boolean ativo;
     //Relacionamento com a tabela 'Campanhas'
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -146,6 +148,10 @@ public class Item {
     }
 
     public void setImagem(String imagem) {this.imagem = imagem;}
+
+    public boolean isAtivo() {return ativo;}
+
+    public void setAtivo(boolean ativo) {this.ativo = ativo;}
 
     @Override
     public boolean equals(Object o) {

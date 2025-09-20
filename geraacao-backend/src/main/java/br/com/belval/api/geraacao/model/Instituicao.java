@@ -70,6 +70,8 @@ public class Instituicao {
     private LocalDate data;
     @Column(name = "imagem", nullable = true)
     private String imagem;
+    @Column(name = "ativo", nullable = false, length = 1)
+    private boolean ativo;
     // Relacionamento com 'Requisicao'
     @OneToMany(mappedBy = "instituicao", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonIgnore
@@ -214,6 +216,14 @@ public class Instituicao {
 
     public void setNumero(String numero) {
         this.numero = numero;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     @PrePersist

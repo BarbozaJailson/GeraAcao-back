@@ -19,6 +19,7 @@ public class MovimentacaoEstoqueResponseDTO {
     private String itemSecao;
     private String itemTipo;
     private String itemImagem;
+    private String itemDescricao;
 
     // IDs opcionais para ligação com Requisição e Doação
     private Integer requisicaoId;
@@ -43,6 +44,7 @@ public class MovimentacaoEstoqueResponseDTO {
             this.itemSecao = mov.getItem().getSecao();
             this.itemTipo = mov.getItem().getTipo();
             this.itemImagem = mov.getItem().getImagem();
+            this.itemDescricao = mov.getItem().getDescricao();
         }
 
         if (mov.getRequisicao() != null) {
@@ -64,7 +66,6 @@ public class MovimentacaoEstoqueResponseDTO {
     public Integer getId() {
         return id;
     }
-
     public void setId(Integer id) {
         this.id = id;
     }
@@ -72,7 +73,6 @@ public class MovimentacaoEstoqueResponseDTO {
     public int getQuantidade() {
         return quantidade;
     }
-
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
@@ -80,7 +80,6 @@ public class MovimentacaoEstoqueResponseDTO {
     public TipoMovimentacao getTipoMovimentacao() {
         return tipoMovimentacao;
     }
-
     public void setTipoMovimentacao(TipoMovimentacao tipoMovimentacao) {
         this.tipoMovimentacao = tipoMovimentacao;
     }
@@ -88,7 +87,6 @@ public class MovimentacaoEstoqueResponseDTO {
     public LocalDateTime getDataMovimentacao() {
         return dataMovimentacao;
     }
-
     public void setDataMovimentacao(LocalDateTime dataMovimentacao) {
         this.dataMovimentacao = dataMovimentacao;
     }
@@ -96,15 +94,14 @@ public class MovimentacaoEstoqueResponseDTO {
     public String getObservacao() {
         return observacao;
     }
-
     public void setObservacao(String observacao) {
         this.observacao = observacao;
     }
 
+    //Getters and Setters Item
     public Integer getItemId() {
         return itemId;
     }
-
     public void setItemId(Integer itemId) {
         this.itemId = itemId;
     }
@@ -112,7 +109,6 @@ public class MovimentacaoEstoqueResponseDTO {
     public String getItemNome() {
         return itemNome;
     }
-
     public void setItemNome(String itemNome) {
         this.itemNome = itemNome;
     }
@@ -120,7 +116,6 @@ public class MovimentacaoEstoqueResponseDTO {
     public String getItemTamanho() {
         return itemTamanho;
     }
-
     public void setItemTamanho(String itemTamanho) {
         this.itemTamanho = itemTamanho;
     }
@@ -128,7 +123,6 @@ public class MovimentacaoEstoqueResponseDTO {
     public String getItemGenero() {
         return itemGenero;
     }
-
     public void setItemGenero(String itemGenero) {
         this.itemGenero = itemGenero;
     }
@@ -136,7 +130,6 @@ public class MovimentacaoEstoqueResponseDTO {
     public String getItemSecao() {
         return itemSecao;
     }
-
     public void setItemSecao(String itemSecao) {
         this.itemSecao = itemSecao;
     }
@@ -144,7 +137,6 @@ public class MovimentacaoEstoqueResponseDTO {
     public String getItemTipo() {
         return itemTipo;
     }
-
     public void setItemTipo(String itemTipo) {
         this.itemTipo = itemTipo;
     }
@@ -152,31 +144,33 @@ public class MovimentacaoEstoqueResponseDTO {
     public String getItemImagem() {
         return itemImagem;
     }
-
     public void setItemImagem(String itemImagem) {
         this.itemImagem = itemImagem;
     }
 
+    public String getItemDescricao() {return itemDescricao;}
+    public void setItemDescricao(String itemDescricao) {this.itemDescricao = itemDescricao;}
+
+    //Getters and Setters Requisição
     public Integer getRequisicaoId() {
         return requisicaoId;
     }
-
     public void setRequisicaoId(Integer requisicaoId) {
         this.requisicaoId = requisicaoId;
     }
 
+    //Getters and Setters Doação
     public Integer getDoacaoId() {
         return doacaoId;
     }
-
     public void setDoacaoId(Integer doacaoId) {
         this.doacaoId = doacaoId;
     }
 
+    //Getters and Setters Instituição
     public Integer getInstituicaoId() {
         return instituicaoId;
     }
-
     public void setInstituicaoId(Integer instituicaoId) {
         this.instituicaoId = instituicaoId;
     }

@@ -5,6 +5,7 @@ import br.com.belval.api.geraacao.model.Item;
 import br.com.belval.api.geraacao.model.Instituicao;
 import br.com.belval.api.geraacao.model.MovimentacaoEstoque;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.Column;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ public class CampanhaResponseDTO {
     private Integer quantidade;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataCadastro;
+    private boolean ativo;
 
     // Dados do Item
     private Integer itemId;
@@ -36,6 +38,7 @@ public class CampanhaResponseDTO {
     private String itemMaterial;
     private String itemDescricao;
     private String itemImagem;
+    private boolean itemAtivo;
 
     // Dados da Instituição
     private Integer instituicaoId;
@@ -51,6 +54,7 @@ public class CampanhaResponseDTO {
     private String instituicaoCidade;
     private String instituicaoUf;
     private String instituicaoImagem;
+    private boolean instituicaoAtivo;
 
     public CampanhaResponseDTO(Campanha campanha) {
         this.id = campanha.getId();
@@ -65,6 +69,7 @@ public class CampanhaResponseDTO {
         this.uf = campanha.getUf();
         this.quantidade = campanha.getQuantidade();
         this.dataCadastro = campanha.getDataCadastro();
+        this.ativo = campanha.isAtivo();
 
         // Item
         Item item = campanha.getItem();
@@ -78,6 +83,7 @@ public class CampanhaResponseDTO {
             this.itemMaterial = item.getMaterial();
             this.itemDescricao = item.getDescricao();
             this.itemImagem = item.getImagem(); // pode ser URL ou nome do arquivo
+            this.itemAtivo = item.isAtivo();
         }
 
         // Instituição
@@ -96,10 +102,11 @@ public class CampanhaResponseDTO {
             this.instituicaoCidade = inst.getCidade();
             this.instituicaoUf = inst.getUf();
             this.instituicaoImagem = inst.getImagem(); // pode ser URL ou nome do arquivo
+            this.instituicaoAtivo = inst.isAtivo();
         }
     }
 
-    // Getters e Setters
+    // Getters e Setters Campanha
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
@@ -136,6 +143,10 @@ public class CampanhaResponseDTO {
     public LocalDate getDataCadastro() { return dataCadastro; }
     public void setDataCadastro(LocalDate dataCadastro) { this.dataCadastro = dataCadastro; }
 
+    public boolean isAtivo() {return ativo;}
+    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+
+    // Getters and Setters Item
     public Integer getItemId() { return itemId; }
     public void setItemId(Integer itemId) { this.itemId = itemId; }
 
@@ -163,6 +174,10 @@ public class CampanhaResponseDTO {
     public String getItemImagem() { return itemImagem; }
     public void setItemImagem(String itemImagem) { this.itemImagem = itemImagem; }
 
+    public boolean isItemAtivo() {return itemAtivo;}
+    public void setItemAtivo(boolean itemAtivo) {this.itemAtivo = itemAtivo;}
+
+    //Getters and Setters Instituição
     public Integer getInstituicaoId() { return instituicaoId; }
     public void setInstituicaoId(Integer instituicaoId) { this.instituicaoId = instituicaoId; }
 
@@ -201,4 +216,8 @@ public class CampanhaResponseDTO {
 
     public String getInstituicaoImagem() { return instituicaoImagem; }
     public void setInstituicaoImagem(String instituicaoImagem) { this.instituicaoImagem = instituicaoImagem; }
-   }
+
+    public boolean isInstituicaoAtivo() {return instituicaoAtivo;}
+    public void setInstituicaoAtivo(boolean instituicaoAtivo) {this.instituicaoAtivo = instituicaoAtivo;}
+
+}

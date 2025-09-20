@@ -4,6 +4,7 @@ import java.util.List;
 import br.com.belval.api.geraacao.dto.UsuarioCreateDTO;
 import br.com.belval.api.geraacao.dto.UsuarioResponseDTO;
 import br.com.belval.api.geraacao.dto.UsuarioUpdateDTO;
+import br.com.belval.api.geraacao.model.Usuario;
 
 public interface UsuarioService {
 
@@ -21,6 +22,5 @@ public interface UsuarioService {
 
     List<UsuarioResponseDTO> buscarPorInstituicao(Integer idInstituicao);
 
-    UsuarioResponseDTO login(String login, String senha);
-
+    Usuario loginEntity(String login, String senha);
 }

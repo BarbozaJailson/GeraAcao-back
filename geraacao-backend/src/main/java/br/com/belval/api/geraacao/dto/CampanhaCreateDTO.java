@@ -1,6 +1,7 @@
 package br.com.belval.api.geraacao.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
@@ -36,6 +37,8 @@ public class CampanhaCreateDTO {
     @NotNull(message = "A quantidade é obrigatória")
     @PositiveOrZero(message = "A quantidade não pode ser negativa")
     private Integer quantidade;
+    @Column(name = "ativo", nullable = false, length = 1)
+    private boolean ativo;
     @NotNull(message = "O item é obrigatório")
     private Integer itemId;
     @NotNull(message = "A instituição é obrigatória")
@@ -111,6 +114,9 @@ public class CampanhaCreateDTO {
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
+
+    public boolean isAtivo() {return ativo;}
+    public void setAtivo(boolean ativo) {this.ativo = ativo;}
 
     public Integer getItemId() {
         return itemId;

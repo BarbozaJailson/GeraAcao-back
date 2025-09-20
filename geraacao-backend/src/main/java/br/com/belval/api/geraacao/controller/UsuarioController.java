@@ -1,9 +1,7 @@
 package br.com.belval.api.geraacao.controller;
 
-import br.com.belval.api.geraacao.dto.LoginDTO;
-import br.com.belval.api.geraacao.dto.UsuarioCreateDTO;
-import br.com.belval.api.geraacao.dto.UsuarioResponseDTO;
-import br.com.belval.api.geraacao.dto.UsuarioUpdateDTO;
+import br.com.belval.api.geraacao.dto.*;
+import br.com.belval.api.geraacao.security.JwtUtil;
 import br.com.belval.api.geraacao.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +14,13 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("http://localhost:5173")
-@RequestMapping("/api/usuario")
+@RequestMapping("/api/auth/usuario")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     //Buscar todos os usuarios
     @GetMapping
@@ -91,22 +91,6 @@ public class UsuarioController {
         }
     }
 
-    //Salvar Usuario
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
-        try {
-            UsuarioResponseDTO response = usuarioService.login(dto.getLogin(), dto.getSenha());
-            return ResponseEntity.ok(response);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        } catch (SecurityException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro interno ao processar login: " + e.getMessage());
-        }
-    }
-
     //Buscar Usuario por tipoUser
     @GetMapping("/doadores/{tipoUser}")
     public ResponseEntity<?> getDoadores(@PathVariable String tipoUser) {
@@ -135,53 +119,5 @@ public class UsuarioController {
                     .body("Erro interno ao buscar usuários: " + e.getMessage());
         }
     }
-//	@GetMapping("/relatorio/pdf")
-//	public void gerarRelatorioUsuarios(HttpServletResponse response) throws IOException {
-//	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//
-//	    List<Usuario> usuarios = usuarioRepository.findAll();
-//
-//	    PdfWriter writer = new PdfWriter(baos);
-//	    PdfDocument pdf = new PdfDocument(writer);
-//	    Document document = new Document(pdf);
-//
-//	    // Título formatado
-//	    document.add(new Paragraph("Relatório de Usuários")
-//	        .setFontSize(16)
-//	        .setBold()
-//	        .setTextAlignment(TextAlignment.CENTER));
-//
-//	    document.add(new Paragraph("\n")); // espaço
-//
-//	    // Cria a tabela com 3 colunas (nome, email, tipo)
-//	    Table table = new Table(UnitValue.createPercentArray(new float[]{4, 4, 2}))
-//	            .useAllAvailableWidth();
-//
-//	    // Cabeçalhos
-//	    table.addHeaderCell(new Cell().add(new Paragraph("Nome").setBold().setFontSize(12)));
-//	    table.addHeaderCell(new Cell().add(new Paragraph("E-mail").setBold().setFontSize(12)));
-//	    table.addHeaderCell(new Cell().add(new Paragraph("Tipo").setBold().setFontSize(12)));
-//
-//	    // Linhas com dados
-//	    for (Usuario usuario : usuarios) {
-//	        table.addCell(new Cell().add(new Paragraph(usuario.getNome()).setFontSize(10)));
-//	        table.addCell(new Cell().add(new Paragraph(usuario.getEmail()).setFontSize(10)));
-//	        table.addCell(new Cell().add(new Paragraph(usuario.getTipoUser()).setFontSize(10)));
-//	    }
-//
-//	    // Adiciona tabela ao documento
-//	    document.add(table);
-//
-//	    document.close();
-//
-//	    response.setContentType("application/pdf; charset=UTF-8");
-//	    response.setHeader("Content-Disposition", "attachment; filename=usuarios.pdf");
-//	    response.setContentLength(baos.size());
-//
-//	    response.getOutputStream().write(baos.toByteArray());
-//	    response.getOutputStream().flush();
-//	    response.getOutputStream().close();
-//	}
-
 }
 

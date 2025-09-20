@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("http://localhost:5173")
-@RequestMapping("/api/requisicoes")
+@RequestMapping("/api/auth/requisicoes")
 public class RequisicaoController {
 
     @Autowired

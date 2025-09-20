@@ -1,5 +1,6 @@
 package br.com.belval.api.geraacao.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
@@ -7,15 +8,13 @@ public class RequisicaoCreateDTO {
 
     @PositiveOrZero(message = "A quantidade deve ser zero ou maior")
     private int quantidade;
-
     private String status;
-
     @PositiveOrZero(message = "A quantidade deve ser zero ou maior")
     private int quantidadeAtendida;
-
+    @Column(name = "ativo", nullable = false, length = 1)
+    private boolean ativo;
     @NotNull(message = "O ID do item é obrigatório")
     private Integer itemId;
-
     @NotNull(message = "O ID da instituição é obrigatório")
     private Integer instituicaoId;
 
@@ -23,7 +22,6 @@ public class RequisicaoCreateDTO {
     public int getQuantidade() {
         return quantidade;
     }
-
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
@@ -31,7 +29,6 @@ public class RequisicaoCreateDTO {
     public int getQuantidadeAtendida() {
         return quantidadeAtendida;
     }
-
     public void setQuantidadeAtendida(int quantidadeAtendida) {
         this.quantidadeAtendida = quantidadeAtendida;
     }
@@ -39,15 +36,16 @@ public class RequisicaoCreateDTO {
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }
 
+    public boolean isAtivo() {return ativo;}
+    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+
     public Integer getItemId() {
         return itemId;
     }
-
     public void setItemId(Integer itemId) {
         this.itemId = itemId;
     }
@@ -55,7 +53,6 @@ public class RequisicaoCreateDTO {
     public Integer getInstituicaoId() {
         return instituicaoId;
     }
-
     public void setInstituicaoId(Integer instituicaoId) {
         this.instituicaoId = instituicaoId;
     }

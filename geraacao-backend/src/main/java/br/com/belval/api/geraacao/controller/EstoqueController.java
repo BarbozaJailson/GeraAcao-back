@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("http://localhost:5173")
-@RequestMapping("/api/estoque")
+@RequestMapping("/api/auth/estoque")
 public class EstoqueController {
 
     private final EstoqueService estoqueService;

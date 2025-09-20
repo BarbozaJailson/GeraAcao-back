@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.persistence.*;
@@ -31,7 +32,7 @@ public class Usuario {
     @Column(name = "email", nullable = false, length = 50, unique = true)
     @NotBlank(message = "O e-mail é obrigatório")
     private String email;
-    @Column(name = "senha", nullable = false, length = 50)
+    @Column(name = "senha", nullable = false, length = 100)
     @NotBlank(message = "A senha é obrigatória")
     @Size(min = 6, message = "A senha deve ter no mínimo 6 caracteres")
     private String senha;
@@ -62,17 +63,18 @@ public class Usuario {
     @Column(name = "numero", nullable = true, length = 6)
     @Size(max = 6, message = "O Numero deve ter no máximo 6 caracteres")
     private String numero;
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo_user", nullable = false, length = 30)
-    @NotBlank(message = "O Tipo_doador é obrigatório")
-    @Size(max = 30, message = "O Tipo_doador deve ter no máximo 30 caracteres")
-    private String tipoUser;
+    private TipoUser tipoUser;
     @Column(name = "telefone", nullable = true, length = 11)
     @Size(min = 11, max = 11, message = "O Telefone deve ter 11 caracteres")
     private String telefone;
+    @Column(name = "ativo", nullable = false, length = 1)
+    private boolean ativo;
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Doacao> doacoes = new ArrayList<>();
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "Instituicao_Usuario",
             joinColumns = @JoinColumn(name = "id_usuario"),
             inverseJoinColumns = @JoinColumn(name = "id_instituicao"))
@@ -82,7 +84,7 @@ public class Usuario {
 
     public Usuario(Integer id, String nome, String cpf, String email, String senha, String imagem,
                    LocalDate dataNascimento, String cep, String tipoLogradouro, String logradouro,
-                   String bairro, String cidade, String uf, String numero, String tipoUser,
+                   String bairro, String cidade, String uf, String numero, TipoUser tipoUser,
                    String telefone) {
         this.id = id;
         this.nome = nome;
@@ -215,11 +217,11 @@ public class Usuario {
         this.numero = numero;
     }
 
-    public String getTipoUser() {
+    public TipoUser getTipoUser() {
         return tipoUser;
     }
 
-    public void setTipoUser(String tipoUser) {
+    public void setTipoUser(TipoUser tipoUser) {
         this.tipoUser = tipoUser;
     }
 
@@ -239,6 +241,10 @@ public class Usuario {
         this.instituicoes = instituicoes;
     }
 
+    public boolean isAtivo() {return ativo;}
+
+    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -251,7 +257,5 @@ public class Usuario {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
-
-
 }
 
