@@ -70,7 +70,7 @@ public class Usuario {
     @Size(min = 11, max = 11, message = "O Telefone deve ter 11 caracteres")
     private String telefone;
     @Column(name = "ativo", nullable = false, length = 1)
-    private boolean ativo;
+    private Boolean ativo;
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Doacao> doacoes = new ArrayList<>();
@@ -85,7 +85,7 @@ public class Usuario {
     public Usuario(Integer id, String nome, String cpf, String email, String senha, String imagem,
                    LocalDate dataNascimento, String cep, String tipoLogradouro, String logradouro,
                    String bairro, String cidade, String uf, String numero, TipoUser tipoUser,
-                   String telefone) {
+                   String telefone, Boolean ativo) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -102,6 +102,7 @@ public class Usuario {
         this.numero = numero;
         this.tipoUser = tipoUser;
         this.telefone = telefone;
+        this.ativo = ativo;
     }
 
     //	Getters and Setters
@@ -241,9 +242,9 @@ public class Usuario {
         this.instituicoes = instituicoes;
     }
 
-    public boolean isAtivo() {return ativo;}
+    public Boolean isAtivo() {return ativo;}
 
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 
     @Override
     public boolean equals(Object o) {

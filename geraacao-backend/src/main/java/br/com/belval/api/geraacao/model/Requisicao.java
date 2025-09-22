@@ -34,7 +34,7 @@ public class Requisicao {
     @Size(max = 15, message = "O Statuss deve ter no máximo 15 caracteres")
     private String status;
     @Column(name = "ativo", nullable = false, length = 1)
-    private boolean ativo;
+    private Boolean ativo;
     @ManyToOne
     @JoinColumn(name = "id_instituicao", nullable = false)
     @NotNull(message = "A instituição é obrigatória")
@@ -53,7 +53,7 @@ public class Requisicao {
     }
 
     //	Construtor
-    public Requisicao(Integer id, int quantidade, int quantidadeAtendida, LocalDate data, String status, Instituicao instituicao, Item item, List<Doacao> doacoes) {
+    public Requisicao(Integer id, int quantidade, int quantidadeAtendida, LocalDate data, String status, Instituicao instituicao, Item item, List<Doacao> doacoes, Boolean ativo) {
         this.id = id;
         this.quantidade = quantidade;
         this.quantidadeAtendida = quantidadeAtendida;
@@ -62,6 +62,7 @@ public class Requisicao {
         this.instituicao = instituicao;
         this.item = item;
         this.doacoes = doacoes;
+        this.ativo = ativo;
     }
 
     @PrePersist
@@ -130,11 +131,10 @@ public class Requisicao {
         this.quantidadeAtendida += quantidade;
     }
 
-    public boolean isAtivo() {
+    public Boolean isAtivo() {
         return ativo;
     }
-
-    public void setAtivo(boolean ativo) {
+    public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
 

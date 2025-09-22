@@ -12,7 +12,7 @@ public class RequisicaoResponseDTO {
     private LocalDate data;
     private String status;
     private int saldo;
-    private boolean ativo;
+    private Boolean ativo;
 
     // Dados Instituicao
     private Integer instituicaoId;
@@ -41,6 +41,7 @@ public class RequisicaoResponseDTO {
         this.data = requisicao.getData();
         this.status = requisicao.getStatus();
         this.saldo = requisicao.getSaldo();
+        this.ativo = requisicao.isAtivo();
         if (requisicao.getInstituicao() != null) {
             this.instituicaoId = requisicao.getInstituicao().getId();
             this.instituicaoNome = requisicao.getInstituicao().getNome();
@@ -76,6 +77,9 @@ public class RequisicaoResponseDTO {
 
     public String getStatus() {return status;}
     public void setStatus(String status) {this.status = status;}
+
+    public Boolean getAtivo() {return ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 
     public int getSaldo() {return saldo;}
     public void setSaldo(int saldo) {this.saldo = saldo;}

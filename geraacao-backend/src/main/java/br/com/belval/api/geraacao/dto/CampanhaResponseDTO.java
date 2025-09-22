@@ -26,7 +26,7 @@ public class CampanhaResponseDTO {
     private Integer quantidade;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataCadastro;
-    private boolean ativo;
+    private Boolean ativo;
 
     // Dados do Item
     private Integer itemId;
@@ -38,7 +38,7 @@ public class CampanhaResponseDTO {
     private String itemMaterial;
     private String itemDescricao;
     private String itemImagem;
-    private boolean itemAtivo;
+    private Boolean itemAtivo;
 
     // Dados da Instituição
     private Integer instituicaoId;
@@ -54,7 +54,7 @@ public class CampanhaResponseDTO {
     private String instituicaoCidade;
     private String instituicaoUf;
     private String instituicaoImagem;
-    private boolean instituicaoAtivo;
+    private Boolean instituicaoAtivo;
 
     public CampanhaResponseDTO(Campanha campanha) {
         this.id = campanha.getId();
@@ -143,8 +143,8 @@ public class CampanhaResponseDTO {
     public LocalDate getDataCadastro() { return dataCadastro; }
     public void setDataCadastro(LocalDate dataCadastro) { this.dataCadastro = dataCadastro; }
 
-    public boolean isAtivo() {return ativo;}
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public Boolean isAtivo() {return ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 
     // Getters and Setters Item
     public Integer getItemId() { return itemId; }
@@ -174,8 +174,8 @@ public class CampanhaResponseDTO {
     public String getItemImagem() { return itemImagem; }
     public void setItemImagem(String itemImagem) { this.itemImagem = itemImagem; }
 
-    public boolean isItemAtivo() {return itemAtivo;}
-    public void setItemAtivo(boolean itemAtivo) {this.itemAtivo = itemAtivo;}
+    public Boolean isItemAtivo() {return itemAtivo;}
+    public void setItemAtivo(Boolean itemAtivo) {this.itemAtivo = itemAtivo;}
 
     //Getters and Setters Instituição
     public Integer getInstituicaoId() { return instituicaoId; }
@@ -217,7 +217,7 @@ public class CampanhaResponseDTO {
     public String getInstituicaoImagem() { return instituicaoImagem; }
     public void setInstituicaoImagem(String instituicaoImagem) { this.instituicaoImagem = instituicaoImagem; }
 
-    public boolean isInstituicaoAtivo() {return instituicaoAtivo;}
-    public void setInstituicaoAtivo(boolean instituicaoAtivo) {this.instituicaoAtivo = instituicaoAtivo;}
+    public Boolean isInstituicaoAtivo() {return instituicaoAtivo;}
+    public void setInstituicaoAtivo(Boolean instituicaoAtivo) {this.instituicaoAtivo = instituicaoAtivo;}
 
 }

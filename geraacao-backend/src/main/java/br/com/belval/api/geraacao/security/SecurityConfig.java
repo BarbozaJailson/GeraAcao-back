@@ -2,6 +2,7 @@ package br.com.belval.api.geraacao.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,9 +16,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
     @Bean
@@ -27,10 +29,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // login e registro
                         // Exemplo: permitir acesso às imagens sem autenticação
-                        .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers("/**").permitAll() // login e registro
+                        .requestMatchers("/uploads/**").hasRole("GERENCIADOR")
+                        .requestMatchers(HttpMethod.GET, "/instituicoes/**").hasAnyRole("ADMIN_N1", "ADMIN_N2", "GERENCIADOR")
+                        .requestMatchers("/instituicoes/**").hasAnyRole("ADMIN_N2", "GERENCIADOR")
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint) // <- Tratamento de token inválido/expirado
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // <- sem sessão, só JWT
+                )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

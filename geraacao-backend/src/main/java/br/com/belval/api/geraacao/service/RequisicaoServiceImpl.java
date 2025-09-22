@@ -41,6 +41,7 @@ public class RequisicaoServiceImpl implements RequisicaoService{
         requisicao.setQuantidade(dto.getQuantidade());
         requisicao.setStatus(dto.getStatus());
         requisicao.setData(LocalDate.now());
+        requisicao.setAtivo(dto.isAtivo() != null ? dto.isAtivo() : true);
         requisicao.setInstituicao(istituicao);
         requisicao.setItem(item);
         requisicao = requisicaoRepository.save(requisicao);
@@ -53,6 +54,7 @@ public class RequisicaoServiceImpl implements RequisicaoService{
         Requisicao requisicao = requisicaoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Requisicao com id " + id + " não encontrado"));
         if(dto.getStatus() != null) {requisicao.setStatus(dto.getStatus());}
+        if(dto.isAtivo() != null) {requisicao.setAtivo(dto.isAtivo());}
         if(dto.getQuantidade() != null) {requisicao.setQuantidade(dto.getQuantidade());}
         if(dto.getInstituicaoId() != null) {
             Instituicao instituicao = instituicaoRepository.findById(dto.getInstituicaoId())

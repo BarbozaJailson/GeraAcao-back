@@ -10,7 +10,7 @@ public class RequisicaoUpdateDTO {
     private Integer quantidade;
     private String status;
     @Column(name = "ativo", nullable = false, length = 1)
-    private boolean ativo;
+    private Boolean ativo;
     @NotNull(message = "O ID do item é obrigatório")
     private Integer itemId;
     @NotNull(message = "O ID da instituição é obrigatório")
@@ -31,8 +31,8 @@ public class RequisicaoUpdateDTO {
         this.status = status;
     }
 
-    public boolean isAtivo() {return ativo;}
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public Boolean isAtivo() {return ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 
     public Integer getItemId() {
         return itemId;

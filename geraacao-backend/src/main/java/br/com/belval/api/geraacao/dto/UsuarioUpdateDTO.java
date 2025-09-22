@@ -39,7 +39,7 @@ public class UsuarioUpdateDTO {
     private String telefone;
     private MultipartFile imagem;  // Para atualizar a imagem opcionalmente
     @Column(name = "ativo", nullable = false, length = 1)
-    private boolean ativo;
+    private Boolean ativo;
 
     // Getters e Setters
 
@@ -144,8 +144,8 @@ public class UsuarioUpdateDTO {
         this.imagem = imagem;
     }
 
-    public boolean isAtivo() {return ativo;}
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public Boolean isAtivo() {return ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 }
 
 

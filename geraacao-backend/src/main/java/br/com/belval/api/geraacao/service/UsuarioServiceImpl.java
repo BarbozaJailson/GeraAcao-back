@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import br.com.belval.api.geraacao.exception.ResourceNotFoundException;
 import br.com.belval.api.geraacao.model.TipoUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,9 +70,10 @@ public class UsuarioServiceImpl implements UsuarioService{
             usuario.setTipoLogradouro(dto.getTipoLogradouro());
             usuario.setTipoUser(TipoUser.valueOf(dto.getTipoUser()));
             usuario.setUf(dto.getUf());
+            usuario.setAtivo(dto.isAtivo() != null ? dto.isAtivo() : true);
             usuario.setImagem(fileName != null ? "/uploads/" + fileName : null);
-            usuario.setSenha(dto.getSenha());
-            if (dto.getInstituicaoId() != null) {
+            usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+            if (usuario.getTipoUser() != TipoUser.DOADOR && dto.getInstituicaoId() != null) {
                 Instituicao instituicao = instituicaoRepository.findById(dto.getInstituicaoId())
                         .orElseThrow(() -> new ResourceNotFoundException("Instituição não encontrada"));
                 usuario.getInstituicoes().add(instituicao);
@@ -101,6 +103,7 @@ public class UsuarioServiceImpl implements UsuarioService{
             if (dto.getTipoLogradouro() != null) { usuario.setTipoLogradouro(dto.getTipoLogradouro()); }
             if (dto.getTipoUser() != null) { usuario.setTipoUser(TipoUser.valueOf(dto.getTipoUser())); }
             if (dto.getUf() != null) { usuario.setUf(dto.getUf()); }
+            if (dto.isAtivo() != null) { usuario.setAtivo(dto.isAtivo()); }
             if (dto.getImagem() != null && !dto.getImagem().isEmpty()) {
                 if (usuario.getImagem() != null) {
                     String caminhoAntigo = usuario.getImagem();
@@ -192,7 +195,7 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
     @Override
     @Transactional(readOnly = true)
-    public Usuario loginEntity(String login, String senha) {
+    public Usuario loginEntity(String login, String senha, String cliente) {
         Usuario usuario = usuarioRepository.findByEmail(login)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
@@ -203,11 +206,26 @@ public class UsuarioServiceImpl implements UsuarioService{
 
         // Verifica tipo de usuário permitido
         TipoUser tipo = usuario.getTipoUser();
-        if (tipo != TipoUser.ADMIN_N1 && tipo != TipoUser.GERENCIADOR) {
+        if ("web".equalsIgnoreCase(cliente) && tipo != TipoUser.ADMIN_N1 && tipo != TipoUser.ADMIN_N2 && tipo != TipoUser.GERENCIADOR) {
             throw new SecurityException("Tipo de usuário não autorizado");
         }
-
+        if ("app".equalsIgnoreCase(cliente) && tipo != TipoUser.DOADOR) {
+            throw new SecurityException("Tipo de usuário não autorizado");
+        }
         return usuario; // Retorna a entity
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Usuario getUsuarioLogado(Authentication authentication) {
+        if (authentication == null || authentication.getName() == null) {
+            throw new SecurityException("Usuário não autenticado");
+        }
+
+        String email = authentication.getName(); // O Spring guarda o username aqui
+
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado para o e-mail: " + email));
     }
 
 

@@ -28,7 +28,7 @@ public class Doacao {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate data;
     @Column(name = "ativo", nullable = false, length = 1)
-    private boolean ativo;
+    private Boolean ativo;
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
     @NotNull(message = "O Usuario é obrigatório")
@@ -44,7 +44,7 @@ public class Doacao {
     }
 
     //	Construtor
-    public Doacao(Integer id, String status, int quantidade, LocalDate data, Usuario usuario, Requisicao requisicao, boolean ativo) {
+    public Doacao(Integer id, String status, int quantidade, LocalDate data, Usuario usuario, Requisicao requisicao, Boolean ativo) {
         super();
         this.id = id;
         this.status = status;
@@ -102,8 +102,8 @@ public class Doacao {
     public void setRequisicao(Requisicao requisicao) {
         this.requisicao = requisicao;
     }
-    public boolean isAtivo() {return ativo;}
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public Boolean isAtivo() {return ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 
     @Override
     public boolean equals(Object o) {

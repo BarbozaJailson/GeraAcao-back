@@ -15,7 +15,7 @@ public class DoacaoCreateDTO {
     @NotNull(message = "A quantidade é obrigatória")
     private Integer quantidade;
     @Column(name = "ativo", nullable = false, length = 1)
-    private boolean ativo;
+    private Boolean ativo;
     @NotNull(message = "O id do usuário é obrigatório")
     private Integer usuarioId;
     @NotNull(message = "O id da requisição é obrigatório")
@@ -29,8 +29,8 @@ public class DoacaoCreateDTO {
     public Integer getQuantidade() {return quantidade;}
     public void setQuantidade(Integer quantidade) {this.quantidade = quantidade;}
 
-    public boolean isAtivo() {return ativo;}
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public Boolean isAtivo() {return ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 
     public Integer getUsuarioId() {return usuarioId;}
     public void setUsuarioId(Integer usuarioId) {this.usuarioId = usuarioId;}

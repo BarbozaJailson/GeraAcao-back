@@ -43,6 +43,7 @@ public class InstituicaoServiceImpl implements InstituicaoService{
             instituicao.setTelefone(dto.getTelefone());
             instituicao.setTipoLogradouro(dto.getTipoLogradouro());
             instituicao.setUf(dto.getUf());
+            instituicao.setAtivo(dto.isAtivo() != null ? dto.isAtivo() : true);
             instituicao.setImagem(fileName != null ? "/uploads/" + fileName : null);
             Instituicao novaInstituicao = instituicaoRepository.save(instituicao);
             return new InstituicaoResponseDTO(novaInstituicao);
@@ -58,17 +59,18 @@ public class InstituicaoServiceImpl implements InstituicaoService{
         try {
             Instituicao instituicao = instituicaoRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Instituição com id " + id + " não encontrada"));
-            instituicao.setNome(dto.getNome());
-            instituicao.setBairro(dto.getBairro());
-            instituicao.setCep(dto.getCep());
-            instituicao.setCnpj(dto.getCnpj());
-            instituicao.setCidade(dto.getCidade());
-            instituicao.setEmail(dto.getEmail());
-            instituicao.setLogradouro(dto.getLogradouro());
-            instituicao.setNumero(dto.getNumero());
-            instituicao.setTelefone(dto.getTelefone());
-            instituicao.setTipoLogradouro(dto.getTipoLogradouro());
-            instituicao.setUf(dto.getUf());
+            if(dto.getNome() != null) {instituicao.setNome(dto.getNome());}
+            if(dto.getEmail() != null) {instituicao.setEmail(dto.getEmail());}
+            if(dto.getBairro() != null) {instituicao.setBairro(dto.getBairro());}
+            if(dto.getCidade() != null) {instituicao.setCidade(dto.getCidade());}
+            if(dto.getUf() != null) {instituicao.setUf(dto.getUf());}
+            if(dto.getNumero() != null) {instituicao.setNumero(dto.getNumero());}
+            if(dto.isAtivo() != null) {instituicao.setAtivo(dto.isAtivo());}
+            if(dto.getCnpj() != null) {instituicao.setCnpj(dto.getCnpj());}
+            if(dto.getCep() != null) {instituicao.setCep(dto.getCep());}
+            if(dto.getLogradouro() != null) {instituicao.setLogradouro(dto.getLogradouro());}
+            if(dto.getTipoLogradouro() != null) {instituicao.setTipoLogradouro(dto.getTipoLogradouro());}
+            if(dto.getTelefone() != null) {instituicao.setTelefone(dto.getTelefone());}
             if (dto.getImagem() != null && !dto.getImagem().isEmpty()) {
                 // Apaga arquivo antigo se existir
                 if (instituicao.getImagem() != null) {

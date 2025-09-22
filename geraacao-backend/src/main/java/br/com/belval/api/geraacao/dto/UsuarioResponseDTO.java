@@ -24,7 +24,7 @@ public class UsuarioResponseDTO {
     private String numero;
     private String tipoUser; // mudou de TipoUser para String
     private String telefone;
-    private boolean ativo;
+    private Boolean ativo;
     private List<InstituicaoResponseDTO> instituicoes;
 
     public UsuarioResponseDTO(Usuario usuario) {
@@ -68,7 +68,7 @@ public class UsuarioResponseDTO {
     public String getNumero() { return numero; }
     public String getTipoUser() { return tipoUser; }
     public String getTelefone() { return telefone; }
-    public boolean isAtivo() { return ativo; }
+    public Boolean isAtivo() { return ativo; }
     public List<InstituicaoResponseDTO> getInstituicoes() { return instituicoes; }
 
     // ==================== Métodos adicionais ====================

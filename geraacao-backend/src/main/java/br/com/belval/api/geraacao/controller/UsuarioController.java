@@ -14,13 +14,11 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("http://localhost:5173")
-@RequestMapping("/api/auth/usuario")
+@RequestMapping("/api/usuario")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
-    @Autowired
-    private JwtUtil jwtUtil;
 
     //Buscar todos os usuarios
     @GetMapping
@@ -47,18 +45,6 @@ public class UsuarioController {
         }
     }
 
-    //Salvar Usuario
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> salvarUsuario(@ModelAttribute @Valid UsuarioCreateDTO dto) {
-        try {
-            UsuarioResponseDTO usuario = usuarioService.criarUsuario(dto);
-            return ResponseEntity.ok(usuario);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro ao salvar usuario: " + e.getMessage());
-        }
-    }
-
     //Atualizar usuario pelo Id
     @PutMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUsuario(
@@ -72,7 +58,7 @@ public class UsuarioController {
         }catch(Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro ao atualizar doação: " + e.getMessage());
+                    .body("Erro ao atualizar usuário: " + e.getMessage());
         }
     }
 

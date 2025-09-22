@@ -81,6 +81,7 @@ public class CampanhaServiceImpl implements CampanhaService {
         campanha.setUf(dto.getUf());
         campanha.setQuantidade(dto.getQuantidade());
         campanha.setItem(item);
+        campanha.setAtivo(dto.isAtivo() != null ? dto.isAtivo() : true);
         campanha.setInstituicao(instituicao);
         campanha.setDataCadastro(LocalDate.now());
         campanhaRepository.save(campanha);
@@ -111,6 +112,7 @@ public class CampanhaServiceImpl implements CampanhaService {
         if (campanhaDTO.getDataEvento() != null) {campanha.setDataEvento(campanhaDTO.getDataEvento());}
         if (campanhaDTO.getUf() != null) {campanha.setUf(campanhaDTO.getUf());}
         if (campanhaDTO.getTipoLogradouro() != null) {campanha.setTipoLogradouro(campanhaDTO.getTipoLogradouro());}
+        if (campanhaDTO.isAtivo() != null) {campanha.setAtivo(campanhaDTO.isAtivo());}
         if (campanhaDTO.getLogradouro() != null) {campanha.setLogradouro(campanhaDTO.getLogradouro());}
         if (campanhaDTO.getNumero() != null) {campanha.setNumero(campanhaDTO.getNumero());}
         campanha.setItem(item);

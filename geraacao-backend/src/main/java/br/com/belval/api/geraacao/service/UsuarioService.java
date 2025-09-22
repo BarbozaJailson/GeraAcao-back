@@ -5,6 +5,7 @@ import br.com.belval.api.geraacao.dto.UsuarioCreateDTO;
 import br.com.belval.api.geraacao.dto.UsuarioResponseDTO;
 import br.com.belval.api.geraacao.dto.UsuarioUpdateDTO;
 import br.com.belval.api.geraacao.model.Usuario;
+import org.springframework.security.core.Authentication;
 
 public interface UsuarioService {
 
@@ -22,5 +23,7 @@ public interface UsuarioService {
 
     List<UsuarioResponseDTO> buscarPorInstituicao(Integer idInstituicao);
 
-    Usuario loginEntity(String login, String senha);
+    Usuario loginEntity(String login, String senha, String cliente);
+
+    Usuario getUsuarioLogado(Authentication authentication);
 }

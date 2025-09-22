@@ -34,7 +34,7 @@ public class InstituicaoCreateDTO {
     private String uf;
     private MultipartFile imagem;
     @Column(name = "ativo", nullable = false, length = 1)
-    private boolean ativo;
+    private Boolean ativo;
 
     // Getters e Setters
     public String getNome() {return nome;}
@@ -73,7 +73,7 @@ public class InstituicaoCreateDTO {
     public MultipartFile getImagem() {return imagem;}
     public void setImagem(MultipartFile imagem) {this.imagem = imagem;}
 
-    public boolean isAtivo() {return ativo;}
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public Boolean isAtivo() {return ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 }
 

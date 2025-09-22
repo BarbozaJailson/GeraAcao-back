@@ -57,7 +57,7 @@ public class Campanha {
     @Column(name = "data_cadastro")
     private LocalDate dataCadastro;
     @Column(name = "ativo", nullable = false, length = 1)
-    private boolean ativo;
+    private Boolean ativo;
     //Relacionamento com 'Item'
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_item", nullable = false)
@@ -75,7 +75,7 @@ public class Campanha {
 
     public Campanha() {}
 
-    public Campanha(Integer id, String descricao, LocalDate dataEvento, String tipoLogradouro, String logradouro, String numero, String cep, String bairro, String cidade, String uf, Integer quantidade, LocalDate dataCadastro, Item item, Instituicao instituicao, List<MovimentacaoEstoque> movimentacaoEstoque) {
+    public Campanha(Integer id, String descricao, LocalDate dataEvento, String tipoLogradouro, String logradouro, String numero, String cep, String bairro, String cidade, String uf, Integer quantidade, LocalDate dataCadastro, Item item, Instituicao instituicao, List<MovimentacaoEstoque> movimentacaoEstoque, Boolean ativo) {
         this.id = id;
         this.descricao = descricao;
         this.dataEvento = dataEvento;
@@ -91,6 +91,7 @@ public class Campanha {
         this.item = item;
         this.instituicao = instituicao;
         this.movimentacaoEstoque = movimentacaoEstoque;
+        this.ativo = ativo;
     }
 
     public Integer getId() {
@@ -165,8 +166,8 @@ public class Campanha {
     public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
-    public boolean isAtivo() {return ativo;}
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public Boolean isAtivo() {return ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
     public Item getItem() {
         return item;
     }

@@ -51,7 +51,7 @@ public class Item {
     @Column(name = "imagem", nullable = true)
     private String imagem;
     @Column(name = "ativo", nullable = false, length = 1)
-    private boolean ativo;
+    private Boolean ativo;
     //Relacionamento com a tabela 'Campanhas'
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -66,7 +66,7 @@ public class Item {
 
     // Construtor completo
     public Item(Integer id, String nome, String tamanho, String secao, String tipo, String genero, String material,
-                String descricao, String imagem) {
+                String descricao, String imagem, Boolean ativo) {
         this.id = id;
         this.nome = nome;
         this.tamanho = tamanho;
@@ -76,6 +76,7 @@ public class Item {
         this.material = material;
         this.descricao = descricao;
         this.imagem = imagem;
+        this.ativo = ativo;
     }
 
     // Getters e setters
@@ -149,9 +150,9 @@ public class Item {
 
     public void setImagem(String imagem) {this.imagem = imagem;}
 
-    public boolean isAtivo() {return ativo;}
+    public Boolean isAtivo() {return ativo;}
 
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 
     @Override
     public boolean equals(Object o) {

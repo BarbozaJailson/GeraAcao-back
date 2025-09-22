@@ -13,7 +13,7 @@ public class DoacaoUpdateDTO {
     private Integer quantidade;
     private Integer usuarioId;
     private Integer requisicaoId;
-    private boolean ativo;
+    private Boolean ativo;
     // Getters e Setters
 
     public String getStatus() {return status;}
@@ -28,7 +28,7 @@ public class DoacaoUpdateDTO {
     public Integer getRequisicaoId() {return requisicaoId;}
     public void setRequisicaoId(Integer requisicaoId) {this.requisicaoId = requisicaoId;}
 
-    public boolean isAtivo() {return ativo;}
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public Boolean isAtivo() {return ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 }
 

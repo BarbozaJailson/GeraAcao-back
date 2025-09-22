@@ -20,7 +20,7 @@ public class DoacaoResponseDTO {
     private String usuarioCidade;
     private String usuarioUf;
     private String usuarioNumero;
-    private boolean usuarioAtivo;
+    private Boolean usuarioAtivo;
 
     // Dados da instituição
     private Integer instituicaoId;
@@ -31,7 +31,7 @@ public class DoacaoResponseDTO {
     private String instituicaoCidade;
     private String instituicaoUf;
     private String instituicaoNumero;
-    private boolean instituicaoAtivo;
+    private Boolean instituicaoAtivo;
 
     // Dados do item
     private Integer itemId;
@@ -42,12 +42,12 @@ public class DoacaoResponseDTO {
     private String itemTipo;
     private String itemImagem;
     private String itemDescricao;
-    private boolean itemAtivo;
+    private Boolean itemAtivo;
 
     // Dados da requisição
     private Integer requisicaoId;
     private int requisicaoQuantidade;
-    private boolean requisicaoAtivo;
+    private Boolean requisicaoAtivo;
     private String requisicaoStatus;
     private LocalDate requisicaoData;
 
@@ -121,8 +121,8 @@ public class DoacaoResponseDTO {
     public LocalDate getData() {return data;}
     public void setData(LocalDate data) {this.data = data;}
 
-    public boolean isAtivo() {return ativo;}
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public Boolean isAtivo() {return ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 
     //Getters ans Setters Usuario
     public Integer getUsuarioId() {return usuarioId;}
@@ -149,8 +149,8 @@ public class DoacaoResponseDTO {
     public String getUsuarioNumero() {return usuarioNumero;}
     public void setUsuarioNumero(String usuarioNumero) {this.usuarioNumero = usuarioNumero;}
 
-    public boolean isUsuarioAtivo() {return usuarioAtivo;}
-    public void setUsuarioAtivo(boolean usuarioAtivo) {this.usuarioAtivo = usuarioAtivo;}
+    public Boolean isUsuarioAtivo() {return usuarioAtivo;}
+    public void setUsuarioAtivo(Boolean usuarioAtivo) {this.usuarioAtivo = usuarioAtivo;}
 
     //Getters and Setters Instituição
     public Integer getInstituicaoId() {return instituicaoId;}
@@ -177,8 +177,8 @@ public class DoacaoResponseDTO {
     public String getInstituicaoNumero() {return instituicaoNumero;}
     public void setInstituicaoNumero(String instituicaoNumero) {this.instituicaoNumero = instituicaoNumero;}
 
-    public boolean isInstituicaoAtivo() {return instituicaoAtivo;}
-    public void setInstituicaoAtivo(boolean instituicaoAtivo) {this.instituicaoAtivo = instituicaoAtivo;}
+    public Boolean isInstituicaoAtivo() {return instituicaoAtivo;}
+    public void setInstituicaoAtivo(Boolean instituicaoAtivo) {this.instituicaoAtivo = instituicaoAtivo;}
 
     //Getters and Setters Item
     public Integer getItemId() {return itemId;}
@@ -205,8 +205,8 @@ public class DoacaoResponseDTO {
     public String getItemDescricao() {return itemDescricao;}
     public void setItemDescricao(String itemDescricao) {this.itemDescricao = itemDescricao;}
 
-    public boolean isItemAtivo() {return itemAtivo;}
-    public void setItemAtivo(boolean itemAtivo) {this.itemAtivo = itemAtivo;}
+    public Boolean isItemAtivo() {return itemAtivo;}
+    public void setItemAtivo(Boolean itemAtivo) {this.itemAtivo = itemAtivo;}
 
     //Getters and Setters Requisição
     public Integer getRequisicaoId() {return requisicaoId;}
@@ -221,7 +221,7 @@ public class DoacaoResponseDTO {
     public LocalDate getRequisicaoData() {return requisicaoData;}
     public void setRequisicaoData(LocalDate requisicaoData) {this.requisicaoData = requisicaoData;}
 
-    public boolean isRequisicaoAtivo() {return requisicaoAtivo;}
-    public void setRequisicaoAtivo(boolean requisicaoAtivo) {this.requisicaoAtivo = requisicaoAtivo;}
+    public Boolean isRequisicaoAtivo() {return requisicaoAtivo;}
+    public void setRequisicaoAtivo(Boolean requisicaoAtivo) {this.requisicaoAtivo = requisicaoAtivo;}
 }
 

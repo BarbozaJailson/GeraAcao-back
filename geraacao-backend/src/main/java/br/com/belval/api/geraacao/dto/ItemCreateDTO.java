@@ -27,7 +27,7 @@ public class ItemCreateDTO {
     private String descricao;
     private MultipartFile imagem; // tem que ser MultipartFile se você for acessar getOriginalFilename()
     @Column(name = "ativo", nullable = false, length = 1)
-    private boolean ativo;
+    private Boolean ativo;
 
     // Getters e Setters
     public String getNome() {
@@ -86,8 +86,8 @@ public class ItemCreateDTO {
         this.imagem = imagem;
     }
 
-    public boolean isAtivo() {return ativo;}
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public Boolean isAtivo() {return ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 }
 
 

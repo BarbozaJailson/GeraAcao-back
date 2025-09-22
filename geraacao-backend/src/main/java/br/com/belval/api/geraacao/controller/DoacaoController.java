@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("http://localhost:5173")
-@RequestMapping("/api/auth/doacoes")
+@RequestMapping("/api/doacoes")
 public class DoacaoController {
 
     @Autowired

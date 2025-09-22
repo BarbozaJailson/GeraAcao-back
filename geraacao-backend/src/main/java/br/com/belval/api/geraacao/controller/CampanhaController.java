@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/auth/campanha")
+@RequestMapping("/api/campanha")
 public class CampanhaController {
 
     @Autowired

@@ -44,6 +44,7 @@ public class ItemServiceImpl implements ItemService{
             item.setSecao(dto.getSecao());
             item.setTamanho(dto.getTamanho());
             item.setTipo(dto.getTipo());
+            item.setAtivo(dto.isAtivo() != null ? dto.isAtivo() : true);
             item.setImagem(fileName != null ? "/uploads/" + fileName : null);
             item = itemRepository.save(item);
             return new ItemResponseDTO(item);
@@ -68,6 +69,7 @@ public class ItemServiceImpl implements ItemService{
             if(dto.getSecao() != null) {item.setSecao(dto.getSecao());}
             if(dto.getTamanho() != null) {item.setTamanho(dto.getTamanho());}
             if(dto.getTipo() != null) {item.setTipo(dto.getTipo());}
+            if(dto.isAtivo() != null) {item.setAtivo(dto.isAtivo());}
             if(dto.getImagem() != null && !dto.getImagem().isEmpty()) {
                 // Apaga arquivo antigo se existir
                 if (item.getImagem() != null) {

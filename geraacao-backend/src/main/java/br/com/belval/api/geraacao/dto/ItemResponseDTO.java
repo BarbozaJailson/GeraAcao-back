@@ -14,7 +14,7 @@ public class ItemResponseDTO {
     private String material;
     private String descricao;
     private String imagem;
-    private boolean ativo;
+    private Boolean ativo;
 
     public ItemResponseDTO(Item item) {
         this.id = item.getId();
@@ -48,7 +48,7 @@ public class ItemResponseDTO {
 
     public String getImagem() {return imagem;}
 
-    public boolean isAtivo() {return ativo;}
+    public Boolean isAtivo() {return ativo;}
 }
 
 

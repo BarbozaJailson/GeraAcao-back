@@ -51,6 +51,7 @@ public class DoacaoServiceImpl implements DoacaoService{
         doacao.setUsuario(usuario);
         doacao.setRequisicao(requisicao);
         doacao.setStatus(dto.getStatus());
+        doacao.setAtivo(dto.isAtivo() != null ? dto.isAtivo() : true);
         Doacao doacaoSalva = doacaoRepository.save(doacao);
         //int saldo = requisicao.getSaldo();
         requisicao.adicionarDoacao(dto.getQuantidade());
@@ -73,28 +74,25 @@ public class DoacaoServiceImpl implements DoacaoService{
     public DoacaoResponseDTO atualizarDoacao(Integer id, DoacaoUpdateDTO dto) {
         Doacao doacao = doacaoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Doação com id " + id + " não encontrada"));
-        System.out.print("id : " + id);
         if (dto.getStatus() != null) {
             doacao.setStatus(dto.getStatus());
-            System.out.print("Status : " + dto.getStatus());
         }
-        System.out.print("Status : " + dto.getStatus());
         if (dto.getQuantidade() != null) {
             doacao.setQuantidade(dto.getQuantidade());
         }
-        System.out.print("quantidade : " + dto.getQuantidade());
+        if (dto.isAtivo() != null){
+            doacao.setAtivo(dto.isAtivo());
+        }
         if (dto.getUsuarioId() != null) {
             Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
                     .orElseThrow(() -> new ResourceNotFoundException("Usuário com id " + dto.getUsuarioId() + " não encontrado"));
             doacao.setUsuario(usuario);
         }
-        System.out.print("usuarioId : " + dto.getUsuarioId());
         if (dto.getRequisicaoId() != null) {
             Requisicao requisicao = requisicaoRepository.findById(dto.getRequisicaoId())
                     .orElseThrow(() -> new ResourceNotFoundException("Requisição com id " + dto.getRequisicaoId() + " não encontrada"));
             doacao.setRequisicao(requisicao);
         }
-        System.out.print("requisicaoId : " + dto.getRequisicaoId());
         doacao = doacaoRepository.save(doacao);
         return new DoacaoResponseDTO(doacao);
     }

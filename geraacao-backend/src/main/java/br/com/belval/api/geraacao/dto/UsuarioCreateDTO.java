@@ -44,7 +44,7 @@ public class UsuarioCreateDTO {
     @Size(min = 11, max = 11)
     private String telefone;
     @Column(name = "ativo", nullable = false, length = 1)
-    private boolean ativo;
+    private Boolean ativo;
     private Integer instituicaoId;
 
     // Getters e Setters
@@ -152,8 +152,8 @@ public class UsuarioCreateDTO {
         this.telefone = telefone;
     }
 
-    public boolean isAtivo() {return ativo;}
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public Boolean isAtivo() {return ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 
     public Integer getInstituicaoId() {
         return instituicaoId;

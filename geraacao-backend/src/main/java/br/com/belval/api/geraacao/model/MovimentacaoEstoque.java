@@ -42,7 +42,7 @@ public class MovimentacaoEstoque {
     @JoinColumn(name = "id_instituicao", nullable = false)
     private Instituicao instituicao;
     @Column(name = "ativo", nullable = false, length = 1)
-    private boolean ativo;
+    private Boolean ativo;
     @ManyToOne
     @JoinColumn(name = "id_campanha")
     private Campanha campanha;
@@ -54,7 +54,7 @@ public class MovimentacaoEstoque {
                                @Size(max = 20, message = "O tipo movimentação deve ter no máximo 20 caracteres") @NotNull(message = "Tipo movimentacao é obrigatoria") TipoMovimentacao tipoMovimentacao,
                                @NotNull(message = "Data momvimentacao não pode estar vazia") LocalDateTime dataMovimentacao,
                                @Size(max = 255, message = "O campo observação deve ter no maximo 255 caracteres") String observacao,
-                               Item item, Requisicao requisicao, Doacao doacao) {
+                               Item item, Requisicao requisicao, Doacao doacao, Boolean ativo) {
         super();
         this.id = id;
         this.quantidade = quantidade;
@@ -64,6 +64,7 @@ public class MovimentacaoEstoque {
         this.item = item;
         this.requisicao = requisicao;
         this.doacao = doacao;
+        this.ativo = ativo;
     }
 
     public Integer getId() {
@@ -138,8 +139,8 @@ public class MovimentacaoEstoque {
         this.instituicao = instituicao;
     }
 
-    public boolean isAtivo() {return ativo;}
+    public Boolean isAtivo() {return ativo;}
 
-    public void setAtivo(boolean ativo) {this.ativo = ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 }
 

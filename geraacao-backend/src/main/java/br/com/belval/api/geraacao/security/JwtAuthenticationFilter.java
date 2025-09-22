@@ -32,29 +32,53 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            String username;
 
-        String token = authHeader.substring(7);
-        String username = jwtUtil.extractEmail(token);
+            try {
+                username = jwtUtil.extractEmail(token);
+                String tipoUser = jwtUtil.extractTipoUser(token);
+                String cliente = request.getHeader("X-Client"); // "web" ou "app"
+                if ("web".equalsIgnoreCase(cliente) &&
+                        !(tipoUser.equals("ADMIN") || tipoUser.equals("GERENCIADOR"))) {
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Tipo de usuário não autorizado para web");
+                    return;
+                }
+                if ("app".equalsIgnoreCase(cliente) &&
+                        !tipoUser.equals("DOADOR")) {
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Tipo de usuário não autorizado para app");
+                    return;
+                }
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido");
+                return;
+            }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            if (jwtUtil.validateToken(token, userDetails.getUsername())) {
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
+                try {
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+                    if (jwtUtil.validateToken(token, userDetails.getUsername())) {
+                        UsernamePasswordAuthenticationToken authToken =
+                                new UsernamePasswordAuthenticationToken(
+                                        userDetails,
+                                        null,
+                                        userDetails.getAuthorities()
+                                );
+                        authToken.setDetails(
+                                new org.springframework.security.web.authentication.WebAuthenticationDetailsSource()
+                                        .buildDetails(request)
                         );
-
-                authToken.setDetails(new org.springframework.security.web.authentication.WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);}
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                    }
+                } catch (Exception e) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Usuário não encontrado");
+                    return;
+                }
+            }
         }
-
         filterChain.doFilter(request, response);
     }
 }

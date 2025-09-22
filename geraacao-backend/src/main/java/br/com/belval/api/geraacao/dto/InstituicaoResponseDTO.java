@@ -21,7 +21,7 @@ public class InstituicaoResponseDTO {
     private String uf;
     private String imagem;
     private LocalDate data;
-    private boolean ativo;
+    private Boolean ativo;
 
     public InstituicaoResponseDTO(Instituicao instituicao) {
         this.id = instituicao.getId();
@@ -98,7 +98,7 @@ public class InstituicaoResponseDTO {
         return data;
     }
 
-    public boolean isAtivo() { return ativo; }
+    public Boolean isAtivo() { return ativo; }
 }
 
 

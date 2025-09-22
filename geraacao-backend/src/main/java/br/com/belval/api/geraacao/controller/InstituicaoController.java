@@ -3,23 +3,30 @@ package br.com.belval.api.geraacao.controller;
 import br.com.belval.api.geraacao.dto.InstituicaoCreateDTO;
 import br.com.belval.api.geraacao.dto.InstituicaoResponseDTO;
 import br.com.belval.api.geraacao.dto.InstituicaoUpdateDTO;
+import br.com.belval.api.geraacao.exception.InstituicaoAcessoNegadoException;
+import br.com.belval.api.geraacao.model.TipoUser;
+import br.com.belval.api.geraacao.model.Usuario;
 import br.com.belval.api.geraacao.service.InstituicaoService;
+import br.com.belval.api.geraacao.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
 @CrossOrigin("http://localhost:5173")
-@RequestMapping("/api/auth/instituicao")
+@RequestMapping("/api/instituicao")
 public class InstituicaoController {
 
     @Autowired
     private InstituicaoService instituicaoService;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping
     public ResponseEntity<List<InstituicaoResponseDTO>> getAll() {
@@ -45,8 +52,22 @@ public class InstituicaoController {
     @PutMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> atualizarInstituicao(
             @PathVariable Integer id,
-            @ModelAttribute @Valid InstituicaoUpdateDTO dto) {
-            return ResponseEntity.ok(instituicaoService.atualizarInstituicao(id, dto));
+            @ModelAttribute @Valid InstituicaoUpdateDTO dto,
+            Authentication authentication) {
+
+        Usuario usuarioLogado = usuarioService.getUsuarioLogado(authentication);
+        if (usuarioLogado.getTipoUser() == TipoUser.ADMIN_N2) {
+            boolean pertence = usuarioLogado.getInstituicoes().stream()
+                    .anyMatch(inst -> inst.getId().equals(id));
+
+            if (!pertence) {
+                throw new InstituicaoAcessoNegadoException(
+                        "Você só pode alterar dados da sua própria instituição."
+                );
+            }
+        }
+        var instituicaoAtualizada = instituicaoService.atualizarInstituicao(id, dto);
+        return ResponseEntity.ok(instituicaoAtualizada);
     }
     //Deleta Instituição pelo Id
     @DeleteMapping("/{id}")

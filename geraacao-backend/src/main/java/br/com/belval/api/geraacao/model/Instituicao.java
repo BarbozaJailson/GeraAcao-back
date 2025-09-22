@@ -71,7 +71,7 @@ public class Instituicao {
     @Column(name = "imagem", nullable = true)
     private String imagem;
     @Column(name = "ativo", nullable = false, length = 1)
-    private boolean ativo;
+    private Boolean ativo;
     // Relacionamento com 'Requisicao'
     @OneToMany(mappedBy = "instituicao", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonIgnore
@@ -88,7 +88,7 @@ public class Instituicao {
 
     public Instituicao(Integer id, String nome, String cnpj, String telefone, String email, LocalDate data,
                        String imagem, String cep, String tipoLogradouro, String logradouro, String bairro,
-                       String cidade, String uf, String numero) {
+                       String cidade, String uf, String numero, Boolean ativo) {
         this.id = id;
         this.nome = nome;
         this.cnpj = cnpj;
@@ -103,128 +103,54 @@ public class Instituicao {
         this.cidade = cidade;
         this.uf = uf;
         this.numero = numero;
+        this.ativo = ativo;
     }
 
     // Getters e setters
-    public Integer getId() {
-        return id;
-    }
+    public Integer getId() {return id;}
+    public void setId(Integer id) {this.id = id;}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public String getNome() {return nome;}
+    public void setNome(String nome) {this.nome = nome;}
 
-    public String getNome() {
-        return nome;
-    }
+    public String getCnpj() {return cnpj;}
+    public void setCnpj(String cnpj) {this.cnpj = cnpj;}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    public String getTelefone() {return telefone;}
+    public void setTelefone(String telefone) {this.telefone = telefone;}
 
-    public String getCnpj() {
-        return cnpj;
-    }
+    public String getEmail() {return email;}
+    public void setEmail(String email) {this.email = email;}
 
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
-    }
+    public LocalDate getData() {return data;}
+    public void setData(LocalDate data) {this.data = data;}
 
-    public String getTelefone() {
-        return telefone;
-    }
+    public String getImagem() {return imagem;}
+    public void setImagem(String imagem) {this.imagem = imagem;}
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
+    public String getCep() {return cep;}
+    public void setCep(String cep) {this.cep = cep;}
 
-    public String getEmail() {
-        return email;
-    }
+    public String getTipoLogradouro() {return tipoLogradouro;}
+    public void setTipoLogradouro(String tipoLogradouro) {this.tipoLogradouro = tipoLogradouro;}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public String getLogradouro() {return logradouro;}
+    public void setLogradouro(String logradouro) {this.logradouro = logradouro;}
 
-    public LocalDate getData() {
-        return data;
-    }
+    public String getBairro() {return bairro;}
+    public void setBairro(String bairro) {this.bairro = bairro;}
 
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
+    public String getCidade() {return cidade;}
+    public void setCidade(String cidade) {this.cidade = cidade;}
 
-    public String getImagem() {
-        return imagem;
-    }
+    public String getUf() {return uf;}
+    public void setUf(String uf) {this.uf = uf;}
 
-    public void setImagem(String imagem) {
-        this.imagem = imagem;
-    }
+    public String getNumero() {return numero;}
+    public void setNumero(String numero) {this.numero = numero;}
 
-    public String getCep() {
-        return cep;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    public String getTipoLogradouro() {
-        return tipoLogradouro;
-    }
-
-    public void setTipoLogradouro(String tipoLogradouro) {
-        this.tipoLogradouro = tipoLogradouro;
-    }
-
-    public String getLogradouro() {
-        return logradouro;
-    }
-
-    public void setLogradouro(String logradouro) {
-        this.logradouro = logradouro;
-    }
-
-    public String getBairro() {
-        return bairro;
-    }
-
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
-
-    public String getCidade() {
-        return cidade;
-    }
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    public String getUf() {
-        return uf;
-    }
-
-    public void setUf(String uf) {
-        this.uf = uf;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
+    public Boolean isAtivo() {return ativo;}
+    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
 
     @PrePersist
     public void prePersist() {
