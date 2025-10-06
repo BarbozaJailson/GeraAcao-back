@@ -1,6 +1,7 @@
 package br.com.belval.api.geraacao.repository;
 
 import br.com.belval.api.geraacao.model.Doacao;
+import br.com.belval.api.geraacao.model.Instituicao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,4 +14,9 @@ public interface DoacaoRepository extends JpaRepository<Doacao, Integer> {
     @Query("SELECT d FROM Doacao d WHERE d.requisicao.instituicao.id = :idInstituicao")
     List<Doacao> findByInstituicaoId(@Param("idInstituicao") Long idInstituicao);
 
+    @Query("SELECT d FROM Doacao d " +
+            "join d.requisicao r " +
+            "join r.item i " +
+                "WHERE LOWER(i.nome) LIKE LOWER(CONCAT('%', :nome, '%'))")
+    List<Doacao> findByItemNome(@Param("nome") String nome);
 }

@@ -45,6 +45,17 @@ public class UsuarioController {
         }
     }
 
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> salvar(@ModelAttribute @Valid UsuarioCreateDTO dto) {
+        try {
+            UsuarioResponseDTO usuario = usuarioService.criarUsuario(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao registrar usuario: " + e.getMessage());
+        }
+    }
+
     //Atualizar usuario pelo Id
     @PutMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUsuario(

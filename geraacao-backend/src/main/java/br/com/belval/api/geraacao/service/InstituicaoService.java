@@ -19,4 +19,6 @@ public interface InstituicaoService {
 
     InstituicaoResponseDTO buscarPorCnpj(String cnpj);
 
+    List<InstituicaoResponseDTO> buscarPorNome(String nome);
+
 }

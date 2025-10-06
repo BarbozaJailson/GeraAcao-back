@@ -81,6 +81,7 @@ public class MovimentacaoEstoqueServiceImpl implements MovimentacaoEstoqueServic
         }
         estoqueRepo.save(estoque);
         MovimentacaoEstoque movimento = new MovimentacaoEstoque();
+        movimento.setAtivo(true);
         movimento.setItem(item);
         movimento.setInstituicao(instituicao);
         movimento.setQuantidade(quantidade);

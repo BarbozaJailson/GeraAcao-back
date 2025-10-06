@@ -48,6 +48,11 @@ public class InstituicaoController {
     public ResponseEntity<?> getByCnpj(@PathVariable String cnpj) {
         return ResponseEntity.ok(instituicaoService.buscarPorCnpj(cnpj));
     }
+    //Busca Instituição po nome
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<?> getByNome(@PathVariable String nome) {
+        return ResponseEntity.ok(instituicaoService.buscarPorNome(nome));
+    }
     //Atualiza Instituição pelo Id
     @PutMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> atualizarInstituicao(
@@ -59,7 +64,6 @@ public class InstituicaoController {
         if (usuarioLogado.getTipoUser() == TipoUser.ADMIN_N2) {
             boolean pertence = usuarioLogado.getInstituicoes().stream()
                     .anyMatch(inst -> inst.getId().equals(id));
-
             if (!pertence) {
                 throw new InstituicaoAcessoNegadoException(
                         "Você só pode alterar dados da sua própria instituição."

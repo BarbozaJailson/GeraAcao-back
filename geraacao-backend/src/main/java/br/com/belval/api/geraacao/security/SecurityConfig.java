@@ -30,9 +30,19 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll() // login e registro
                         // Exemplo: permitir acesso às imagens sem autenticação
                         .requestMatchers("/**").permitAll() // login e registro
-                        .requestMatchers("/uploads/**").hasRole("GERENCIADOR")
-                        .requestMatchers(HttpMethod.GET, "/instituicoes/**").hasAnyRole("ADMIN_N1", "ADMIN_N2", "GERENCIADOR")
-                        .requestMatchers("/instituicoes/**").hasAnyRole("ADMIN_N2", "GERENCIADOR")
+                        .requestMatchers("/uploads/**").hasRole("ADMIN_N1, ADMIN_N2, GERENCIADOR")
+                        .requestMatchers(HttpMethod.GET, "/api/instituicoes/**").hasAnyRole("ADMIN_N1", "ADMIN_N2", "GERENCIADOR")
+                        .requestMatchers(HttpMethod.GET, "/api/usuario/**").hasAnyRole("ADMIN_N1", "ADMIN_N2", "GERENCIADOR")
+                        .requestMatchers(HttpMethod.GET, "/api/requisicoes/**").hasAnyRole("ADMIN_N1", "ADMIN_N2", "GERENCIADOR")
+                        .requestMatchers(HttpMethod.GET, "/api/item/**").hasAnyRole("ADMIN_N1", "ADMIN_N2", "GERENCIADOR")
+                        .requestMatchers(HttpMethod.GET, "/api/doacoes/**").hasAnyRole("ADMIN_N1", "ADMIN_N2", "GERENCIADOR")
+                        .requestMatchers(HttpMethod.GET, "/api/campanha/**").hasAnyRole("ADMIN_N1", "ADMIN_N2", "GERENCIADOR")
+                        .requestMatchers("/api/instituicoes/**").hasAnyRole("ADMIN_N2", "GERENCIADOR")
+                        .requestMatchers("/api/usuario/**").hasAnyRole("ADMIN_N2", "GERENCIADOR")
+                        .requestMatchers("/api/requisicoes/**").hasAnyRole("ADMIN_N2", "GERENCIADOR")
+                        .requestMatchers("/api/item/**").hasAnyRole("ADMIN_N2", "GERENCIADOR")
+                        .requestMatchers("/api/doacoes/**").hasAnyRole("ADMIN_N2", "GERENCIADOR")
+                        .requestMatchers("/api/campanha/**").hasAnyRole("ADMIN_N2", "GERENCIADOR")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

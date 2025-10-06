@@ -128,6 +128,17 @@ public class InstituicaoServiceImpl implements InstituicaoService{
                 .map(InstituicaoResponseDTO::new)
                 .collect(Collectors.toList());
     }
+
+    // Busca Instituições por nome no campo Search
+    public List<InstituicaoResponseDTO> buscarPorNome(String nome){
+        List<Instituicao> instituicoes = instituicaoRepository.findByInstituicaoNome(nome);
+        if (instituicoes.isEmpty()) {
+            throw new ResourceNotFoundException("Nenhuma instituição encontrada com o nome " + nome);
+        }
+        return instituicoes.stream()
+                .map(InstituicaoResponseDTO::new)
+                .collect(Collectors.toList());
+    }
     // Exclui instituição por id
     @Override
     public void excluir(Integer id) {

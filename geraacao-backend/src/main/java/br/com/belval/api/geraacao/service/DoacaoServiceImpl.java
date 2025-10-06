@@ -46,11 +46,11 @@ public class DoacaoServiceImpl implements DoacaoService{
             throw new IllegalArgumentException("Quantidade maior que o saldo disponível da requisição.");
         }
         Doacao doacao = new Doacao();
-        //doacao.setStatus(dto.getStatus() != null ? dto.getStatus() : "Pendente");
+        doacao.setStatus(dto.getStatus() != null ? dto.getStatus() : "Pendente");
         doacao.setQuantidade(dto.getQuantidade());
         doacao.setUsuario(usuario);
         doacao.setRequisicao(requisicao);
-        doacao.setStatus(dto.getStatus());
+        //doacao.setStatus(dto.getStatus());
         doacao.setAtivo(dto.isAtivo() != null ? dto.isAtivo() : true);
         Doacao doacaoSalva = doacaoRepository.save(doacao);
         //int saldo = requisicao.getSaldo();

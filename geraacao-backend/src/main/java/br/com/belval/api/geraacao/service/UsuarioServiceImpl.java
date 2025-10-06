@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import br.com.belval.api.geraacao.exception.ResourceNotFoundException;
@@ -167,11 +166,10 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
     @Override
     @Transactional(readOnly = true)
-    public List<UsuarioResponseDTO> buscaPorDoador(String tipoUser) {
-        if (tipoUser == null || tipoUser.trim().isEmpty()) {
-            throw new IllegalArgumentException("O tipoUser deve ser informado.");
-        }
+    public List<UsuarioResponseDTO> buscaPorDoador(String tipoUserStr) {
+        TipoUser tipoUser = TipoUser.valueOf(tipoUserStr.toUpperCase());
         List<Usuario> usuarios = usuarioRepository.findByTipoUser(tipoUser);
+        System.out.println(usuarios);
         if (usuarios.isEmpty()) {
             throw new ResourceNotFoundException("Nenhum usuário com tipo '" + tipoUser + "' encontrado");
         }

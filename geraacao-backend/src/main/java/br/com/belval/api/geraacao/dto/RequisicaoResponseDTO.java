@@ -18,11 +18,14 @@ public class RequisicaoResponseDTO {
     private Integer instituicaoId;
     private String instituicaoNome;
     private String instituicaoCnpj;
+    private String instituicaoTipoLogradouro;
     private String instituicaoLogradouro;
     private String instituicaoBairro;
     private String instituicaoCidade;
     private String instituicaoUf;
+    private String instituicaoCep;
     private String instituicaoNumero;
+    private String instituicaoTelefone;
 
     // Dados Item
     private Integer itemId;
@@ -51,6 +54,9 @@ public class RequisicaoResponseDTO {
             this.instituicaoCidade = requisicao.getInstituicao().getCidade();
             this.instituicaoUf = requisicao.getInstituicao().getUf();
             this.instituicaoNumero = requisicao.getInstituicao().getNumero();
+            this.instituicaoTelefone = requisicao.getInstituicao().getTelefone();
+            this.instituicaoTipoLogradouro = requisicao.getInstituicao().getTipoLogradouro();
+            this.instituicaoCep = requisicao.getInstituicao().getCep();
         }
         if (requisicao.getItem() != null) {
             this.itemId = requisicao.getItem().getId();
@@ -94,6 +100,9 @@ public class RequisicaoResponseDTO {
     public String getInstituicaoCidade() {return instituicaoCidade;}
     public String getInstituicaoUf() {return instituicaoUf;}
     public String getInstituicaoNumero() {return instituicaoNumero;}
+    public String getInstituicaoTelefone() {return instituicaoTelefone;}
+    public String getInstituicaoTipoLogradouro() {return instituicaoTipoLogradouro;}
+    public String getInstituicaoCep() {return instituicaoCep;}
 
     //Getters Item
     public Integer getItemId() {return itemId;}

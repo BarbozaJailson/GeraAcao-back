@@ -39,7 +39,7 @@ public class RequisicaoServiceImpl implements RequisicaoService{
                 .orElseThrow(() -> new ResourceNotFoundException("Item com id " + dto.getItemId() + " não encontrado"));
         Requisicao requisicao = new Requisicao();
         requisicao.setQuantidade(dto.getQuantidade());
-        requisicao.setStatus(dto.getStatus());
+        requisicao.setStatus("AGUAR. COLETA");
         requisicao.setData(LocalDate.now());
         requisicao.setAtivo(dto.isAtivo() != null ? dto.isAtivo() : true);
         requisicao.setInstituicao(istituicao);
